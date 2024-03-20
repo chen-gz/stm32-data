@@ -1,5 +1,5 @@
 block/ADC:
-  description: Analog-to-Digital Converter
+  description: Analog to Digital Converter
   items:
   - name: ISR
     description: interrupt and status register
@@ -14,20 +14,22 @@ block/ADC:
     byte_offset: 8
     fieldset: CR
   - name: CFGR
-    description: configuration register
+    description: configuration register 1
     byte_offset: 12
     fieldset: CFGR
   - name: CFGR2
-    description: configuration register
+    description: configuration register 2
     byte_offset: 16
     fieldset: CFGR2
   - name: SMPR
-    description: sample time register 1
+    description: sampling time register 1-2
     array:
       len: 2
       stride: 4
     byte_offset: 20
     fieldset: SMPR
+
+
   - name: TR
     description: watchdog threshold register 1
     array:
@@ -35,40 +37,46 @@ block/ADC:
       stride: 4
     byte_offset: 32
     fieldset: TR
+
   - name: SQR1
-    description: regular sequence register 1
+    description: group regular sequencer ranks register 1
     byte_offset: 48
     fieldset: SQR1
+
   - name: SQR2
-    description: regular sequence register 2
+    description: group regular sequencer ranks register 2
     byte_offset: 52
     fieldset: SQR2
+
   - name: SQR3
-    description: regular sequence register 3
+    description: group regular sequencer ranks register 3
     byte_offset: 56
     fieldset: SQR3
+
   - name: SQR4
-    description: regular sequence register 4
+    description: group regular sequencer ranks register 4
     byte_offset: 60
     fieldset: SQR4
+
   - name: DR
-    description: regular Data Register
+    description: group regular conversion data register
     byte_offset: 64
     access: Read
     fieldset: DR
+
   - name: JSQR
-    description: injected sequence register
+    description: group injected sequencer register
     byte_offset: 76
     fieldset: JSQR
   - name: OFR
-    description: offset register 1
+    description: offset number 1-4 register
     array:
       len: 4
       stride: 4
     byte_offset: 96
     fieldset: OFR
   - name: JDR
-    description: injected data registers
+    description: group injected sequencer rank 1-4 register
     array:
       len: 4
       stride: 4
@@ -76,13 +84,17 @@ block/ADC:
     access: Read
     fieldset: JDR
   - name: AWD2CR
-    description: Analog Watchdog 2 Configuration Register
+    description: analog watchdog 2 configuration register
     byte_offset: 160
     fieldset: AWD2CR
+
+
   - name: AWD3CR
-    description: Analog Watchdog 3 Configuration Register
+    description: analog watchdog 3 configuration register
     byte_offset: 164
     fieldset: AWD3CR
+
+
   - name: DIFSEL
     description: Differential Mode Selection Register 2
     byte_offset: 176

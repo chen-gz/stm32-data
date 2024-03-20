@@ -50,6 +50,10 @@ block/SYSCFG:
     description: USB Type C and Power Delivery register
     byte_offset: 112
     fieldset: UCPDR
+  - name: OTGHSPHYCR
+    description: SYSCFG USB OTG_HS PHY register.
+    byte_offset: 116
+    fieldset: OTGHSPHYCR
 fieldset/CCCR:
   description: compensation cell code register
   fields:
@@ -205,6 +209,21 @@ fieldset/MESR:
     description: IPMEE
     bit_offset: 16
     bit_size: 1
+fieldset/OTGHSPHYCR:
+  description: SYSCFG USB OTG_HS PHY register.
+  fields:
+  - name: EN
+    description: EN.
+    bit_offset: 0
+    bit_size: 1
+  - name: PDCTRL
+    description: PDCTRL.
+    bit_offset: 1
+    bit_size: 1
+  - name: CLKSEL
+    description: CLKSEL.
+    bit_offset: 2
+    bit_size: 4
 fieldset/RSSCMDR:
   description: RSS command register
   fields:
@@ -238,3 +257,4 @@ fieldset/UCPDR:
     description: CC2ENRXFILTER
     bit_offset: 1
     bit_size: 1
+

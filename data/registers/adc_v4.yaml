@@ -32,6 +32,7 @@ block/ADC:
     description: pre channel selection register
     byte_offset: 28
     fieldset: PCSEL
+
   - name: LTR1
     description: analog watchdog 1 threshold register
     byte_offset: 32
@@ -40,31 +41,38 @@ block/ADC:
     description: analog watchdog 2 threshold register
     byte_offset: 36
     fieldset: HTR1
+
   - name: SQR1
     description: group regular sequencer ranks register 1
     byte_offset: 48
     fieldset: SQR1
+
   - name: SQR2
     description: group regular sequencer ranks register 2
     byte_offset: 52
     fieldset: SQR2
+
   - name: SQR3
     description: group regular sequencer ranks register 3
     byte_offset: 56
     fieldset: SQR3
+
   - name: SQR4
     description: group regular sequencer ranks register 4
     byte_offset: 60
     fieldset: SQR4
+
   - name: DR
     description: group regular conversion data register
     byte_offset: 64
     access: Read
     fieldset: DR
+
   - name: JSQR
     description: group injected sequencer register
     byte_offset: 76
     fieldset: JSQR
+
   - name: OFR
     description: offset number 1-4 register
     array:
@@ -72,6 +80,7 @@ block/ADC:
       stride: 4
     byte_offset: 96
     fieldset: OFR
+
   - name: JDR
     description: group injected sequencer rank 1-4 register
     array:
@@ -80,14 +89,17 @@ block/ADC:
     byte_offset: 128
     access: Read
     fieldset: JDR
+
   - name: AWD2CR
     description: analog watchdog 2 configuration register
     byte_offset: 160
     fieldset: AWD2CR
+
   - name: AWD3CR
     description: analog watchdog 3 configuration register
     byte_offset: 164
     fieldset: AWD3CR
+
   - name: LTR2
     description: watchdog lower threshold register 2
     byte_offset: 176
@@ -104,18 +116,22 @@ block/ADC:
     description: watchdog higher threshold register 3
     byte_offset: 188
     fieldset: HTR3
+
   - name: DIFSEL
     description: channel differential or single-ended mode selection register
     byte_offset: 192
     fieldset: DIFSEL
+
   - name: CALFACT
     description: calibration factors register
     byte_offset: 196
     fieldset: CALFACT
+
   - name: CALFACT2
     description: Calibration Factor register 2
     byte_offset: 200
     fieldset: CALFACT2
+
 fieldset/AWD2CR:
   description: analog watchdog 2 configuration register
   fields:
@@ -126,6 +142,7 @@ fieldset/AWD2CR:
     array:
       len: 20
       stride: 1
+
 fieldset/AWD3CR:
   description: analog watchdog 3 configuration register
   fields:
@@ -136,6 +153,7 @@ fieldset/AWD3CR:
     array:
       len: 20
       stride: 1
+
 fieldset/CALFACT:
   description: calibration factors register
   fields:
@@ -147,6 +165,10 @@ fieldset/CALFACT:
     description: calibration factor in differential mode
     bit_offset: 16
     bit_size: 11
+
+
+
+
 fieldset/CALFACT2:
   description: Calibration Factor register 2
   fields:
@@ -154,6 +176,7 @@ fieldset/CALFACT2:
     description: Linearity Calibration Factor
     bit_offset: 0
     bit_size: 30
+
 fieldset/CFGR:
   description: configuration register 1
   fields:
@@ -519,6 +542,7 @@ fieldset/JSQR:
     bit_offset: 7
     bit_size: 2
     enum: JEXTEN
+
   - name: JSQ1
     description: group injected sequencer rank 1-4
     bit_offset: 9
@@ -547,6 +571,7 @@ fieldset/LTR3:
     description: Analog watchdog 3 lower threshold
     bit_offset: 0
     bit_size: 26
+
 fieldset/OFR:
   description: offset number x register
   fields:
@@ -562,6 +587,8 @@ fieldset/OFR:
     description: Signed saturation enable
     bit_offset: 31
     bit_size: 1
+
+
 fieldset/PCSEL:
   description: channel preselection register
   fields:
@@ -573,6 +600,7 @@ fieldset/PCSEL:
       len: 20
       stride: 1
     enum: PCSEL
+
 fieldset/SMPR:
   description: sampling time register n
   fields:
