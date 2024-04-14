@@ -8,6 +8,6 @@ cargo run --release --bin stm32-metapac-gen
 export COMMIT_HASH=$(git rev-parse HEAD)
 cd build/
 git add data stm32-metapac
-git -c user.name='Guangzong Chen - CI' -c user.email='chen@ggeta.com' commit -m "Generated from stm32-data $COMMIT_HASH"
-git -c user.name='Guangzong Chen - CI' -c user.email='chen@ggeta.com' tag - a stm32-data-$COMMIT -m "Generated from stm32-data $COMMIT_HASH"
+git commit -m "Generated from stm32-data $COMMIT_HASH"
+git tag -a stm32-data-$COMMIT -m "Generated from stm32-data $COMMIT_HASH"
 git push --follow-tags
