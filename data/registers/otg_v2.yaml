@@ -1,0 +1,1510 @@
+block/OTG_HS:
+  description: OTG_HS.
+  items:
+    - name: GOTGCTL
+      description: Control and status register
+      byte_offset: 0
+      fieldset: GOTGCTL
+    - name: GOTGINT
+      description: Interrupt register
+      byte_offset: 4
+      fieldset: GOTGINT
+    - name: GAHBCFG
+      description: AHB configuration register
+      byte_offset: 8
+      fieldset: GAHBCFG
+    - name: GUSBCFG
+      description: USB configuration register
+      byte_offset: 12
+      fieldset: GUSBCFG
+    - name: GRSTCTL
+      description: Reset register
+      byte_offset: 16
+      fieldset: GRSTCTL
+    - name: GINTSTS
+      description: Core interrupt register
+      byte_offset: 20
+      fieldset: GINTSTS
+    - name: GINTMSK
+      description: Interrupt mask register
+      byte_offset: 24
+      fieldset: GINTMSK
+    - name: GRXSTSR
+      description: Receive status debug read register
+      byte_offset: 28
+      access: Read
+      fieldset: GRXSTS
+    - name: GRXSTSP
+      description: Status read and pop register
+      byte_offset: 32
+      access: Read
+      fieldset: GRXSTS
+
+    - name: GRXFSIZ
+      description: Receive FIFO size register
+      byte_offset: 36
+      fieldset: GRXFSIZ
+    - name: DIEPTXF0
+      description: Endpoint 0 transmit FIFO size register (device mode)
+      byte_offset: 40
+      fieldset: FSIZ
+
+    - name: GCCFG_V1
+      description: General core configuration register, for core_id 0x0000_1xxx
+      byte_offset: 56
+      fieldset: GCCFG_V1
+    - name: GCCFG_V2
+      description: General core configuration register, for core_id 0x0000_[23]xxx
+      byte_offset: 56
+      fieldset: GCCFG_V2
+    - name: CID
+      description: Core ID register
+      byte_offset: 60
+      fieldset: CID
+    - name: GLPMCFG
+      description: OTG core LPM configuration register
+      byte_offset: 84
+      fieldset: GLPMCFG
+
+    - name: DIEPTXF
+      description: Device IN endpoint transmit FIFO size register
+      array:
+        len: 7
+        stride: 4
+      byte_offset: 260
+      fieldset: FSIZ
+    - name: HCFG
+      description: Host configuration register
+      byte_offset: 1024
+      fieldset: HCFG
+    - name: HFIR
+      description: Host frame interval register
+      byte_offset: 1028
+      fieldset: HFIR
+    - name: HFNUM
+      description: Host frame number/frame time remaining register
+      byte_offset: 1032
+      access: Read
+      fieldset: HFNUM
+    - name: HPTXSTS
+      description: Periodic transmit FIFO/queue status register
+      byte_offset: 1040
+      access: Read
+    - name: HAINT
+      description: Host all channels interrupt register
+      byte_offset: 1044
+      access: Read
+      fieldset: HAINT
+    - name: HAINTMSK
+      description: Host all channels interrupt mask register
+      byte_offset: 1048
+      fieldset: HAINTMSK
+    - name: HPRT
+      description: Host port control and status register
+      byte_offset: 1088
+      fieldset: HPRT
+
+    - name: DCFG
+      description: Device configuration register
+      byte_offset: 2048
+      fieldset: DCFG
+    - name: DCTL
+      description: Device control register
+      byte_offset: 2052
+      fieldset: DCTL
+    - name: DSTS
+      description: Device status register
+      byte_offset: 2056
+      access: Read
+      fieldset: DSTS
+    - name: DIEPMSK
+      description: Device IN endpoint common interrupt mask register
+      byte_offset: 2064
+      fieldset: DIEPMSK
+    - name: DOEPMSK
+      description: Device OUT endpoint common interrupt mask register
+      byte_offset: 2068
+      fieldset: DOEPMSK
+    - name: DAINT
+      description: Device all endpoints interrupt register
+      byte_offset: 2072
+      access: Read
+      fieldset: DAINT
+    - name: DAINTMSK
+      description: All endpoints interrupt mask register
+      byte_offset: 2076
+      fieldset: DAINTMSK
+    - name: DVBUSDIS
+      description: Device VBUS discharge time register
+      byte_offset: 2088
+      fieldset: DVBUSDIS
+    - name: DVBUSPULSE
+      description: Device VBUS pulsing time register
+      byte_offset: 2092
+      fieldset: DVBUSPULSE
+    - name: DTHRCTL
+      description: OTG device threshold control register.
+      byte_offset: 2096
+      fieldset: DTHRCTL
+    - name: DIEPEMPMSK
+      description: Device IN endpoint FIFO empty interrupt mask register
+      byte_offset: 2100
+      fieldset: DIEPEMPMSK
+    - name: HS_DOEPEACHMSK1
+      description: OTG device each OUT endpoint-1 interrupt mask register.
+      byte_offset: 2180
+      fieldset: HS_DOEPEACHMSK1
+    - name: DIEPCTL
+      description: Device IN endpoint control register
+      array:
+        len: 16
+        stride: 32
+      byte_offset: 2304
+      fieldset: DIEPCTL
+    - name: DIEPINT
+      description: Device IN endpoint interrupt register
+      array:
+        len: 16
+        stride: 32
+      byte_offset: 2312
+      fieldset: DIEPINT
+    - name: DIEPTSIZ
+      description: Device IN endpoint transfer size register
+      array:
+        len: 16
+        stride: 32
+      byte_offset: 2320
+      fieldset: DIEPTSIZ
+    - name: DTXFSTS
+      description: Device IN endpoint transmit FIFO status register
+      array:
+        len: 16
+        stride: 32
+      byte_offset: 2328
+      access: Read
+      fieldset: DTXFSTS
+    - name: DOEPCTL
+      description: Device OUT endpoint control register
+      array:
+        len: 16
+        stride: 32
+      byte_offset: 2816
+      fieldset: DOEPCTL
+    - name: DOEPINT
+      description: Device OUT endpoint interrupt register
+      array:
+        len: 16
+        stride: 32
+      byte_offset: 2824
+      fieldset: DOEPINT
+    - name: DOEPTSIZ
+      description: Device OUT endpoint transfer size register
+      array:
+        len: 16
+        stride: 32
+      byte_offset: 2832
+      fieldset: DOEPTSIZ
+    - name: DOEPDMA
+      description: OTG device OUT endpoint 0 DMA address register.
+      byte_offset: 2836
+      array:
+        len: 16
+        stride: 32
+      fieldset: DOEPDMA
+
+    - name: PCGCCTL
+      description: Power and clock gating control register
+      byte_offset: 3584
+      fieldset: PCGCCTL
+    - name: FIFO
+      description: Device endpoint / host channel FIFO register
+      array:
+        len: 16
+        stride: 4096
+      byte_offset: 4096
+      fieldset: FIFO
+fieldset/CID:
+  description: Core ID register
+  fields:
+    - name: PRODUCT_ID
+      description: Product ID field
+      bit_offset: 0
+      bit_size: 32
+fieldset/DAINT:
+  description: Device all endpoints interrupt register
+  fields:
+    - name: IEPINT
+      description: IN endpoint interrupt bits
+      bit_offset: 0
+      bit_size: 16
+    - name: OEPINT
+      description: OUT endpoint interrupt bits
+      bit_offset: 16
+      bit_size: 16
+fieldset/DAINTMSK:
+  description: All endpoints interrupt mask register
+  fields:
+    - name: IEPM
+      description: IN EP interrupt mask bits
+      bit_offset: 0
+      bit_size: 16
+    - name: OEPM
+      description: OUT EP interrupt mask bits
+      bit_offset: 16
+      bit_size: 16
+fieldset/DCFG:
+  description: Device configuration register
+  fields:
+    - name: DSPD
+      description: Device speed
+      bit_offset: 0
+      bit_size: 2
+    - name: NZLSOHSK
+      description: Non-zero-length status OUT handshake
+      bit_offset: 2
+      bit_size: 1
+    - name: DAD
+      description: Device address
+      bit_offset: 4
+      bit_size: 7
+    - name: PFIVL
+      description: PFIVL.
+      bit_offset: 11
+      bit_size: 2
+    - name: ERRATIM
+      description: ERRATIM.
+      bit_offset: 15
+      bit_size: 1
+fieldset/DCTL:
+  description: Device control register
+  fields:
+    - name: RWUSIG
+      description: Remote wakeup signaling
+      bit_offset: 0
+      bit_size: 1
+    - name: SDIS
+      description: Soft disconnect
+      bit_offset: 1
+      bit_size: 1
+    - name: GINSTS
+      description: Global IN NAK status
+      bit_offset: 2
+      bit_size: 1
+    - name: GONSTS
+      description: Global OUT NAK status
+      bit_offset: 3
+      bit_size: 1
+    - name: TCTL
+      description: Test control
+      bit_offset: 4
+      bit_size: 3
+    - name: SGINAK
+      description: SGINAK.
+      bit_offset: 7
+      bit_size: 1
+    - name: CGINAK
+      description: CGINAK.
+      bit_offset: 8
+      bit_size: 1
+    - name: SGONAK
+      description: SGONAK.
+      bit_offset: 9
+      bit_size: 1
+    - name: CGONAK
+      description: CGONAK.
+      bit_offset: 10
+      bit_size: 1
+    - name: POPRGDNE
+      description: POPRGDNE.
+      bit_offset: 11
+      bit_size: 1
+    - name: DSBESLRJCT
+      description: DSBESLRJCT.
+      bit_offset: 18
+      bit_size: 1
+
+fieldset/DIEPCTL:
+  description: Device endpoint control register
+  fields:
+    - name: MPSIZ
+      description: MPSIZ
+      bit_offset: 0
+      bit_size: 11
+    - name: USBAEP
+      description: USBAEP
+      bit_offset: 15
+      bit_size: 1
+    - name: EONUM_DPID
+      description: EONUM/DPID
+      bit_offset: 16
+      bit_size: 1
+    - name: NAKSTS
+      description: NAKSTS
+      bit_offset: 17
+      bit_size: 1
+    - name: EPTYP
+      description: EPTYP
+      bit_offset: 18
+      bit_size: 2
+      # enum: EPTYP
+    - name: SNPM
+      description: SNPM
+      bit_offset: 20
+      bit_size: 1
+    - name: STALL
+      description: STALL
+      bit_offset: 21
+      bit_size: 1
+    - name: TXFNUM
+      description: TXFNUM
+      bit_offset: 22
+      bit_size: 4
+    - name: CNAK
+      description: CNAK
+      bit_offset: 26
+      bit_size: 1
+    - name: SNAK
+      description: SNAK
+      bit_offset: 27
+      bit_size: 1
+    - name: SD0PID_SEVNFRM
+      description: SD0PID/SEVNFRM
+      bit_offset: 28
+      bit_size: 1
+    - name: SODDFRM_SD1PID
+      description: SODDFRM/SD1PID
+      bit_offset: 29
+      bit_size: 1
+    - name: EPDIS
+      description: EPDIS
+      bit_offset: 30
+      bit_size: 1
+    - name: EPENA
+      description: EPENA
+      bit_offset: 31
+      bit_size: 1
+
+fieldset/DIEPEMPMSK:
+  description: This register is used to control the IN endpoint FIFO empty interrupt generation (TXFE_DIEPINTx).
+  fields:
+    - name: INEPTXFEM
+      description: INEPTXFEM.
+      bit_offset: 0
+      bit_size: 16
+fieldset/DIEPINT:
+  description: Device endpoint interrupt register
+  fields:
+    - name: XFRC
+      description: XFRC
+      bit_offset: 0
+      bit_size: 1
+    - name: EPDISD
+      description: EPDISD
+      bit_offset: 1
+      bit_size: 1
+    - name: TOC
+      description: TOC
+      bit_offset: 3
+      bit_size: 1
+    - name: ITTXFE
+      description: ITTXFE
+      bit_offset: 4
+      bit_size: 1
+    - name: INEPNM
+      description: INEPNM.
+      bit_offset: 5
+      bit_size: 1
+    - name: INEPNE
+      description: INEPNE
+      bit_offset: 6
+      bit_size: 1
+    - name: TXFE
+      description: TXFE
+      bit_offset: 7
+      bit_size: 1
+    - name: PKTDRPSTS
+      description: PKTDRPSTS.
+      bit_offset: 11
+      bit_size: 1
+    - name: NAK
+      description: NAK.
+      bit_offset: 13
+      bit_size: 1
+
+fieldset/DIEPMSK:
+  description: This register works with each of the DIEPINTx registers for all endpoints to generate an interrupt per IN endpoint. The IN endpoint interrupt for a specific status in the DIEPINTx register can be masked by writing to the corresponding bit in this register. Status bits are masked by default.
+  fields:
+    - name: XFRCM
+      description: XFRCM.
+      bit_offset: 0
+      bit_size: 1
+    - name: EPDM
+      description: EPDM.
+      bit_offset: 1
+      bit_size: 1
+    - name: AHBERRM
+      description: AHBERRM.
+      bit_offset: 2
+      bit_size: 1
+    - name: TOM
+      description: TOM.
+      bit_offset: 3
+      bit_size: 1
+    - name: ITTXFEMSK
+      description: ITTXFEMSK.
+      bit_offset: 4
+      bit_size: 1
+    - name: INEPNMM
+      description: INEPNMM.
+      bit_offset: 5
+      bit_size: 1
+    - name: INEPNEM
+      description: INEPNEM.
+      bit_offset: 6
+      bit_size: 1
+    - name: TXFURM
+      description: TXFURM.
+      bit_offset: 8
+      bit_size: 1
+    - name: NAKM
+      description: NAKM.
+      bit_offset: 13
+      bit_size: 1
+fieldset/DIEPTSIZ:
+  description: The application must modify this register before enabling endpoint 0.
+  fields:
+    - name: XFRSIZ
+      description: XFRSIZ.
+      bit_offset: 0
+      bit_size: 7
+    - name: PKTCNT
+      description: PKTCNT.
+      bit_offset: 19
+      bit_size: 2
+
+fieldset/DOEPCTL:
+  description: This section describes the DOEPCTL0 register.
+  fields:
+    - name: MPSIZ
+      description: MPSIZ.
+      bit_offset: 0
+      bit_size: 2
+    - name: USBAEP
+      description: USBAEP.
+      bit_offset: 15
+      bit_size: 1
+    - name: NAKSTS
+      description: NAKSTS.
+      bit_offset: 17
+      bit_size: 1
+    - name: EPTYP
+      description: EPTYP.
+      bit_offset: 18
+      bit_size: 2
+    - name: SNPM
+      description: SNPM.
+      bit_offset: 20
+      bit_size: 1
+    - name: STALL
+      description: STALL.
+      bit_offset: 21
+      bit_size: 1
+    - name: CNAK
+      description: CNAK.
+      bit_offset: 26
+      bit_size: 1
+    - name: SNAK
+      description: SNAK.
+      bit_offset: 27
+      bit_size: 1
+    - name: EPDIS
+      description: EPDIS.
+      bit_offset: 30
+      bit_size: 1
+    - name: EPENA
+      description: EPENA.
+      bit_offset: 31
+      bit_size: 1
+
+fieldset/DOEPDMA:
+  description: OTG device OUT endpoint 0 DMA address register.
+  fields:
+    - name: DMAADDR
+      description: DMAADDR.
+      bit_offset: 0
+      bit_size: 32
+
+fieldset/DOEPINT:
+  description: This register indicates the status of an endpoint with respect to USB- and AHB-related events. It is shown in Figure724. The application must read this register when the OUT endpoints interrupt bit of the GINTSTS register (OEPINT bit in GINTSTS) is set. Before the application can read this register, it must first read the DAINT register to get the exact endpoint number for the DOEPINTx register. The application must clear the appropriate bit in this register to clear the corresponding bits in the DAINT and GINTSTS registers.
+  fields:
+    - name: XFRC
+      description: XFRC.
+      bit_offset: 0
+      bit_size: 1
+    - name: EPDISD
+      description: EPDISD.
+      bit_offset: 1
+      bit_size: 1
+    - name: AHBERR
+      description: AHBERR.
+      bit_offset: 2
+      bit_size: 1
+    - name: STUP
+      description: STUP.
+      bit_offset: 3
+      bit_size: 1
+    - name: OTEPDIS
+      description: OTEPDIS.
+      bit_offset: 4
+      bit_size: 1
+    - name: STSPHSRX
+      description: STSPHSRX.
+      bit_offset: 5
+      bit_size: 1
+    - name: B2BSTUP
+      description: B2BSTUP.
+      bit_offset: 6
+      bit_size: 1
+    - name: OUTPKTERR
+      description: OUTPKTERR.
+      bit_offset: 8
+      bit_size: 1
+    - name: BNA
+      description: BNA.
+      bit_offset: 9
+      bit_size: 1
+    - name: BERR
+      description: BERR.
+      bit_offset: 12
+      bit_size: 1
+    - name: NAK
+      description: NAK.
+      bit_offset: 13
+      bit_size: 1
+    - name: NYET
+      description: NYET.
+      bit_offset: 14
+      bit_size: 1
+    - name: STPKTRX
+      description: STPKTRX.
+      bit_offset: 15
+      bit_size: 1
+
+fieldset/DOEPMSK:
+  description: This register works with each of the DOEPINTx registers for all endpoints to generate an interrupt per OUT endpoint. The OUT endpoint interrupt for a specific status in the DOEPINTx register can be masked by writing into the corresponding bit in this register. Status bits are masked by default.
+  fields:
+    - name: XFRCM
+      description: XFRCM.
+      bit_offset: 0
+      bit_size: 1
+    - name: EPDM
+      description: EPDM.
+      bit_offset: 1
+      bit_size: 1
+    - name: AHBERRM
+      description: AHBERRM.
+      bit_offset: 2
+      bit_size: 1
+    - name: STUPM
+      description: STUPM.
+      bit_offset: 3
+      bit_size: 1
+    - name: OTEPDM
+      description: OTEPDM.
+      bit_offset: 4
+      bit_size: 1
+    - name: STSPHSRXM
+      description: STSPHSRXM.
+      bit_offset: 5
+      bit_size: 1
+    - name: B2BSTUPM
+      description: B2BSTUPM.
+      bit_offset: 6
+      bit_size: 1
+    - name: OUTPKTERRM
+      description: OUTPKTERRM.
+      bit_offset: 8
+      bit_size: 1
+    - name: BERRM
+      description: BERRM.
+      bit_offset: 12
+      bit_size: 1
+    - name: NAKMSK
+      description: NAKMSK.
+      bit_offset: 13
+      bit_size: 1
+    - name: NYETMSK
+      description: NYETMSK.
+      bit_offset: 14
+      bit_size: 1
+fieldset/DOEPTSIZ:
+  description: The application must modify this register before enabling endpoint 0.
+  fields:
+    - name: XFRSIZ
+      description: XFRSIZ.
+      bit_offset: 0
+      bit_size: 7
+    - name: PKTCNT
+      description: PKTCNT.
+      bit_offset: 19
+      bit_size: 1
+    - name: STUPCNT
+      description: STUPCNT.
+      bit_offset: 29
+      bit_size: 2
+
+fieldset/DSTS:
+  description: This register indicates the status of the core with respect to USB-related events. It must be read on interrupts from the device all interrupts (DAINT) register.
+  fields:
+    - name: SUSPSTS
+      description: SUSPSTS.
+      bit_offset: 0
+      bit_size: 1
+    - name: ENUMSPD
+      description: ENUMSPD.
+      bit_offset: 1
+      bit_size: 2
+    - name: EERR
+      description: EERR.
+      bit_offset: 3
+      bit_size: 1
+    - name: FNSOF
+      description: FNSOF.
+      bit_offset: 8
+      bit_size: 14
+    - name: DEVLNSTS
+      description: DEVLNSTS.
+      bit_offset: 22
+      bit_size: 2
+fieldset/DTHRCTL:
+  description: OTG device threshold control register.
+  fields:
+    - name: NONISOTHREN
+      description: Nonisochronous IN endpoints threshold enable. When this bit is set, the core enables thresholding for nonisochronous IN endpoints.
+      bit_offset: 0
+      bit_size: 1
+    - name: ISOTHREN
+      description: ISO IN endpoint threshold enable. When this bit is set, the core enables thresholding for isochronous IN endpoints.
+      bit_offset: 1
+      bit_size: 1
+    - name: TXTHRLEN
+      description: Transmit threshold length. This field specifies the transmit thresholding size in 32-bit words. This field specifies the amount of data in bytes to be in the corresponding endpoint transmit FIFO, before the core can start transmitting on the USB. The threshold length has to be at least eight 32-bit words. This field controls both isochronous and nonisochronous IN endpoint thresholds. The recommended value for TXTHRLEN is to be the same as the programmed AHB burst length (HBSTLEN bit in OTG_GAHBCFG).
+      bit_offset: 2
+      bit_size: 9
+    - name: RXTHREN
+      description: Receive threshold enable. When this bit is set, the core enables thresholding in the receive direction.
+      bit_offset: 16
+      bit_size: 1
+    - name: RXTHRLEN
+      description: Receive threshold length. This field specifies the receive thresholding size in 32-bit words. This field also specifies the amount of data received on the USB before the core can start transmitting on the AHB. The threshold length has to be at least eight 32-bit words. The recommended value for RXTHRLEN is to be the same as the programmed AHB burst length (HBSTLEN bit in OTG_GAHBCFG).
+      bit_offset: 17
+      bit_size: 9
+    - name: ARPEN
+      description: Arbiter parking enable. This bit controls internal DMA arbiter parking for IN endpoints. When thresholding is enabled and this bit is set to one, then the arbiter parks on the IN endpoint for which there is a token received on the USB. This is done to avoid getting into underrun conditions. By default parking is enabled.
+      bit_offset: 27
+      bit_size: 1
+fieldset/DTXFSTS:
+  description: This read-only register contains the free space information for the device IN endpoint Tx FIFO.
+  fields:
+    - name: INEPTFSAV
+      description: INEPTFSAV.
+      bit_offset: 0
+      bit_size: 16
+
+fieldset/DVBUSDIS:
+  description: This register specifies the VBUS discharge time after VBUS pulsing during SRP.
+  fields:
+    - name: VBUSDT
+      description: VBUSDT.
+      bit_offset: 0
+      bit_size: 16
+fieldset/DVBUSPULSE:
+  description: This register specifies the VBUS pulsing time during SRP.
+  fields:
+    - name: DVBUSP
+      description: DVBUSP.
+      bit_offset: 0
+      bit_size: 16
+fieldset/FSIZ:
+  description: FIFO size register
+  fields:
+    - name: SA
+      description: RAM start address
+      bit_offset: 0
+      bit_size: 16
+    - name: FD
+      description: FIFO depth
+      bit_offset: 16
+      bit_size: 16
+fieldset/FIFO:
+  description: FIFO register
+  fields:
+    - name: DATA
+      description: Data
+      bit_offset: 0
+      bit_size: 32
+fieldset/GAHBCFG:
+  description: This register can be used to configure the core after power-on or a change in mode. This register mainly contains AHB system-related configuration parameters. Do not change this register after the initial programming. The application must program this register before starting any transactions on either the AHB or the USB.
+  fields:
+    - name: GINTMSK
+      description: GINTMSK.
+      bit_offset: 0
+      bit_size: 1
+    - name: TXFELVL
+      description: TXFELVL.
+      bit_offset: 7
+      bit_size: 1
+    - name: PTXFELVL
+      description: PTXFELVL.
+      bit_offset: 8
+      bit_size: 1
+fieldset/GCCFG_V1:
+  description: General core configuration register
+  fields:
+    - name: PWRDWN
+      description: Power down
+      bit_offset: 16
+      bit_size: 1
+    - name: VBUSASEN
+      description: Enable the VBUS "A" sensing device
+      bit_offset: 18
+      bit_size: 1
+    - name: VBUSBSEN
+      description: Enable the VBUS "B" sensing device
+      bit_offset: 19
+      bit_size: 1
+    - name: SOFOUTEN
+      description: SOF output enable
+      bit_offset: 20
+      bit_size: 1
+    - name: NOVBUSSENS
+      description: VBUS sensing disable
+      bit_offset: 21
+      bit_size: 1
+fieldset/GCCFG_V2:
+  description: General core configuration register
+  fields:
+    - name: DCDET
+      description: Data contact detection (DCD) status
+      bit_offset: 0
+      bit_size: 1
+    - name: PDET
+      description: Primary detection (PD) status
+      bit_offset: 1
+      bit_size: 1
+    - name: SDET
+      description: Secondary detection (SD) status
+      bit_offset: 2
+      bit_size: 1
+    - name: PS2DET
+      description: DM pull-up detection status
+      bit_offset: 3
+      bit_size: 1
+    - name: PWRDWN
+      description: Power down
+      bit_offset: 16
+      bit_size: 1
+    - name: BCDEN
+      description: Battery charging detector (BCD) enable
+      bit_offset: 17
+      bit_size: 1
+    - name: DCDEN
+      description: Data contact detection (DCD) mode enable
+      bit_offset: 18
+      bit_size: 1
+    - name: PDEN
+      description: Primary detection (PD) mode enable
+      bit_offset: 19
+      bit_size: 1
+    - name: SDEN
+      description: Secondary detection (SD) mode enable
+      bit_offset: 20
+      bit_size: 1
+    - name: VBDEN
+      description: USB VBUS detection enable
+      bit_offset: 21
+      bit_size: 1
+    - name: PHYHSEN
+      description: Internal high-speed PHY enable.
+      bit_offset: 23
+      bit_size: 1
+fieldset/GINTMSK:
+  description: This register works with the core interrupt register to interrupt the application. When an interrupt bit is masked, the interrupt associated with that bit is not generated. However, the core interrupt (GINTSTS) register bit corresponding to that interrupt is still set.
+  fields:
+    - name: MMISM
+      description: MMISM.
+      bit_offset: 1
+      bit_size: 1
+    - name: OTGINT
+      description: OTGINT.
+      bit_offset: 2
+      bit_size: 1
+    - name: SOFM
+      description: SOFM.
+      bit_offset: 3
+      bit_size: 1
+    - name: RXFLVLM
+      description: RXFLVLM.
+      bit_offset: 4
+      bit_size: 1
+    - name: NPTXFEM
+      description: NPTXFEM.
+      bit_offset: 5
+      bit_size: 1
+    - name: GINAKEFFM
+      description: GINAKEFFM.
+      bit_offset: 6
+      bit_size: 1
+    - name: GONAKEFFM
+      description: GONAKEFFM.
+      bit_offset: 7
+      bit_size: 1
+    - name: ESUSPM
+      description: ESUSPM.
+      bit_offset: 10
+      bit_size: 1
+    - name: USBSUSPM
+      description: USBSUSPM.
+      bit_offset: 11
+      bit_size: 1
+    - name: USBRST
+      description: USBRST.
+      bit_offset: 12
+      bit_size: 1
+    - name: ENUMDNEM
+      description: ENUMDNEM.
+      bit_offset: 13
+      bit_size: 1
+    - name: ISOODRPM
+      description: ISOODRPM.
+      bit_offset: 14
+      bit_size: 1
+    - name: EOPFM
+      description: EOPFM.
+      bit_offset: 15
+      bit_size: 1
+    - name: IEPINT
+      description: IEPINT.
+      bit_offset: 18
+      bit_size: 1
+    - name: OEPINT
+      description: OEPINT.
+      bit_offset: 19
+      bit_size: 1
+    - name: IISOIXFRM
+      description: IISOIXFRM.
+      bit_offset: 20
+      bit_size: 1
+    - name: IPXFRM
+      description: IPXFRM.
+      bit_offset: 21
+      bit_size: 1
+    - name: FSUSPM
+      description: FSUSPM.
+      bit_offset: 22
+      bit_size: 1
+    - name: RSTDETM
+      description: RSTDETM.
+      bit_offset: 23
+      bit_size: 1
+    - name: PRTIM
+      description: PRTIM.
+      bit_offset: 24
+      bit_size: 1
+    - name: HCIM
+      description: HCIM.
+      bit_offset: 25
+      bit_size: 1
+    - name: PTXFEM
+      description: PTXFEM.
+      bit_offset: 26
+      bit_size: 1
+    - name: LPMINTM
+      description: LPMINTM.
+      bit_offset: 27
+      bit_size: 1
+    - name: CIDSCHGM
+      description: CIDSCHGM.
+      bit_offset: 28
+      bit_size: 1
+    - name: DISCINT
+      description: DISCINT.
+      bit_offset: 29
+      bit_size: 1
+    - name: SRQIM
+      description: SRQIM.
+      bit_offset: 30
+      bit_size: 1
+    - name: WUIM
+      description: WUIM.
+      bit_offset: 31
+      bit_size: 1
+fieldset/GINTSTS:
+  description: This register interrupts the application for system-level events in the current mode (device mode or host mode). Some of the bits in this register are valid only in host mode, while others are valid in device mode only. This register also indicates the current mode. To clear the interrupt status bits of the rc_w1 type, the application must write 1 into the bit. The FIFO status interrupts are read-only; once software reads from or writes to the FIFO while servicing these interrupts, FIFO interrupt conditions are cleared automatically. The application must clear the GINTSTS register at initialization before unmasking the interrupt bit to avoid any interrupts generated prior to initialization.
+  fields:
+    - name: CMOD
+      description: CMOD.
+      bit_offset: 0
+      bit_size: 1
+    - name: MMIS
+      description: MMIS.
+      bit_offset: 1
+      bit_size: 1
+    - name: OTGINT
+      description: OTGINT.
+      bit_offset: 2
+      bit_size: 1
+    - name: SOF
+      description: SOF.
+      bit_offset: 3
+      bit_size: 1
+    - name: RXFLVL
+      description: RXFLVL.
+      bit_offset: 4
+      bit_size: 1
+    - name: NPTXFE
+      description: NPTXFE.
+      bit_offset: 5
+      bit_size: 1
+    - name: GINAKEFF
+      description: GINAKEFF.
+      bit_offset: 6
+      bit_size: 1
+    - name: GONAKEFF
+      description: GONAKEFF.
+      bit_offset: 7
+      bit_size: 1
+    - name: ESUSP
+      description: ESUSP.
+      bit_offset: 10
+      bit_size: 1
+    - name: USBSUSP
+      description: USBSUSP.
+      bit_offset: 11
+      bit_size: 1
+    - name: USBRST
+      description: USBRST.
+      bit_offset: 12
+      bit_size: 1
+    - name: ENUMDNE
+      description: ENUMDNE.
+      bit_offset: 13
+      bit_size: 1
+    - name: ISOODRP
+      description: ISOODRP.
+      bit_offset: 14
+      bit_size: 1
+    - name: EOPF
+      description: EOPF.
+      bit_offset: 15
+      bit_size: 1
+    - name: IEPINT
+      description: IEPINT.
+      bit_offset: 18
+      bit_size: 1
+    - name: OEPINT
+      description: OEPINT.
+      bit_offset: 19
+      bit_size: 1
+    - name: IISOIXFR
+      description: IISOIXFR.
+      bit_offset: 20
+      bit_size: 1
+    - name: IPXFR
+      description: IPXFR.
+      bit_offset: 21
+      bit_size: 1
+    - name: DATAFSUSP
+      description: DATAFSUSP.
+      bit_offset: 22
+      bit_size: 1
+    - name: RSTDET
+      description: RSTDET.
+      bit_offset: 23
+      bit_size: 1
+    - name: HPRTINT
+      description: HPRTINT.
+      bit_offset: 24
+      bit_size: 1
+    - name: HCINT
+      description: HCINT.
+      bit_offset: 25
+      bit_size: 1
+    - name: PTXFE
+      description: PTXFE.
+      bit_offset: 26
+      bit_size: 1
+    - name: LPMINT
+      description: LPMINT.
+      bit_offset: 27
+      bit_size: 1
+    - name: CIDSCHG
+      description: CIDSCHG.
+      bit_offset: 28
+      bit_size: 1
+    - name: DISCINT
+      description: DISCINT.
+      bit_offset: 29
+      bit_size: 1
+    - name: SRQINT
+      description: SRQINT.
+      bit_offset: 30
+      bit_size: 1
+    - name: WKUPINT
+      description: WKUPINT.
+      bit_offset: 31
+      bit_size: 1
+fieldset/GLPMCFG:
+  description: OTG core LPM configuration register.
+  fields:
+    - name: LPMEN
+      description: LPMEN.
+      bit_offset: 0
+      bit_size: 1
+    - name: LPMACK
+      description: LPMACK.
+      bit_offset: 1
+      bit_size: 1
+    - name: BESL
+      description: BESL.
+      bit_offset: 2
+      bit_size: 4
+    - name: REMWAKE
+      description: REMWAKE.
+      bit_offset: 6
+      bit_size: 1
+    - name: L1SSEN
+      description: L1SSEN.
+      bit_offset: 7
+      bit_size: 1
+    - name: BESLTHRS
+      description: BESLTHRS.
+      bit_offset: 8
+      bit_size: 4
+    - name: L1DSEN
+      description: L1DSEN.
+      bit_offset: 12
+      bit_size: 1
+    - name: LPMRSP
+      description: LPMRSP.
+      bit_offset: 13
+      bit_size: 2
+    - name: SLPSTS
+      description: SLPSTS.
+      bit_offset: 15
+      bit_size: 1
+    - name: L1RSMOK
+      description: L1RSMOK.
+      bit_offset: 16
+      bit_size: 1
+    - name: LPMCHIDX
+      description: LPMCHIDX.
+      bit_offset: 17
+      bit_size: 4
+    - name: LPMRCNT
+      description: LPMRCNT.
+      bit_offset: 21
+      bit_size: 3
+    - name: SNDLPM
+      description: SNDLPM.
+      bit_offset: 24
+      bit_size: 1
+    - name: LPMRCNTSTS
+      description: LPMRCNTSTS.
+      bit_offset: 25
+      bit_size: 3
+    - name: ENBESL
+      description: ENBESL.
+      bit_offset: 28
+      bit_size: 1
+fieldset/GOTGCTL:
+  description: The GOTGCTL register controls the behavior and reflects the status of the OTG function of the core.
+  fields:
+    - name: SRQSCS
+      description: SRQSCS.
+      bit_offset: 0
+      bit_size: 1
+    - name: SRQ
+      description: SRQ.
+      bit_offset: 1
+      bit_size: 1
+    - name: VBVALOEN
+      description: VBVALOEN.
+      bit_offset: 2
+      bit_size: 1
+    - name: VBVALOVAL
+      description: VBVALOVAL.
+      bit_offset: 3
+      bit_size: 1
+    - name: AVALOEN
+      description: AVALOEN.
+      bit_offset: 4
+      bit_size: 1
+    - name: AVALOVAL
+      description: AVALOVAL.
+      bit_offset: 5
+      bit_size: 1
+    - name: BVALOEN
+      description: BVALOEN.
+      bit_offset: 6
+      bit_size: 1
+    - name: BVALOVAL
+      description: BVALOVAL.
+      bit_offset: 7
+      bit_size: 1
+    - name: HNGSCS
+      description: HNGSCS.
+      bit_offset: 8
+      bit_size: 1
+    - name: HNPRQ
+      description: HNPRQ.
+      bit_offset: 9
+      bit_size: 1
+    - name: HSHNPEN
+      description: HSHNPEN.
+      bit_offset: 10
+      bit_size: 1
+    - name: DHNPEN
+      description: DHNPEN.
+      bit_offset: 11
+      bit_size: 1
+    - name: EHEN
+      description: EHEN.
+      bit_offset: 12
+      bit_size: 1
+    - name: CIDSTS
+      description: CIDSTS.
+      bit_offset: 16
+      bit_size: 1
+    - name: DBCT
+      description: DBCT.
+      bit_offset: 17
+      bit_size: 1
+    - name: ASVLD
+      description: ASVLD.
+      bit_offset: 18
+      bit_size: 1
+    - name: BSVLD
+      description: BSVLD.
+      bit_offset: 19
+      bit_size: 1
+    - name: OTGVER
+      description: OTGVER.
+      bit_offset: 20
+      bit_size: 1
+    - name: CURMOD
+      description: CURMOD.
+      bit_offset: 21
+      bit_size: 1
+fieldset/GOTGINT:
+  description: The application reads this register whenever there is an OTG interrupt and clears the bits in this register to clear the OTG interrupt.
+  fields:
+    - name: SEDET
+      description: SEDET.
+      bit_offset: 2
+      bit_size: 1
+    - name: SRSSCHG
+      description: SRSSCHG.
+      bit_offset: 8
+      bit_size: 1
+    - name: HNSSCHG
+      description: HNSSCHG.
+      bit_offset: 9
+      bit_size: 1
+    - name: HNGDET
+      description: HNGDET.
+      bit_offset: 17
+      bit_size: 1
+    - name: ADTOCHG
+      description: ADTOCHG.
+      bit_offset: 18
+      bit_size: 1
+    - name: DBCDNE
+      description: DBCDNE.
+      bit_offset: 19
+      bit_size: 1
+fieldset/GRSTCTL:
+  description: The application uses this register to reset various hardware features inside the core.
+  fields:
+    - name: CSRST
+      description: CSRST.
+      bit_offset: 0
+      bit_size: 1
+    - name: PSRST
+      description: PSRST.
+      bit_offset: 1
+      bit_size: 1
+    - name: FSRST
+      description: FSRST.
+      bit_offset: 2
+      bit_size: 1
+    - name: RXFFLSH
+      description: RXFFLSH.
+      bit_offset: 4
+      bit_size: 1
+    - name: TXFFLSH
+      description: TXFFLSH.
+      bit_offset: 5
+      bit_size: 1
+    - name: TXFNUM
+      description: TXFNUM.
+      bit_offset: 6
+      bit_size: 5
+    - name: DMAREQ
+      description: DMAREQ.
+      bit_offset: 30
+      bit_size: 1
+    - name: AHBIDL
+      description: AHBIDL.
+      bit_offset: 31
+      bit_size: 1
+fieldset/GRXFSIZ:
+  description: The application can program the RAM size that must be allocated to the Rx FIFO.
+  fields:
+    - name: RXFD
+      description: RXFD.
+      bit_offset: 0
+      bit_size: 16
+fieldset/GRXSTS:
+  description: Status read and pop register
+  fields:
+    - name: EPNUM
+      description: Endpoint number (device mode) / Channel number (host mode)
+      bit_offset: 0
+      bit_size: 4
+    - name: BCNT
+      description: Byte count
+      bit_offset: 4
+      bit_size: 11
+    - name: DPID
+      description: Data PID
+      bit_offset: 15
+      bit_size: 2
+    - name: PKTSTSD
+      description: Packet status (device mode)
+      bit_offset: 17
+      bit_size: 4
+    - name: FRMNUM
+      description: Frame number (device mode)
+      bit_offset: 21
+      bit_size: 4
+    - name: STSPHST
+      description: STSPHST.
+      bit_offset: 27
+      bit_size: 1
+
+fieldset/GUSBCFG:
+  description: This register can be used to configure the core after power-on or a changing to host mode or device mode. It contains USB and USB-PHY related configuration parameters. The application must program this register before starting any transactions on either the AHB or the USB. Do not make changes to this register after the initial programming.
+  fields:
+    - name: TOCAL
+      description: TOCAL.
+      bit_offset: 0
+      bit_size: 3
+    - name: PHYSEL
+      description: PHYSEL.
+      bit_offset: 6
+      bit_size: 1
+    - name: SRPCAP
+      description: SRPCAP.
+      bit_offset: 8
+      bit_size: 1
+    - name: HNPCAP
+      description: HNPCAP.
+      bit_offset: 9
+      bit_size: 1
+    - name: TRDT
+      description: TRDT.
+      bit_offset: 10
+      bit_size: 4
+    - name: PHYLPC
+      description: PHYLPC.
+      bit_offset: 15
+      bit_size: 1
+    - name: TSDPS
+      description: TSDPS.
+      bit_offset: 22
+      bit_size: 1
+    - name: FHMOD
+      description: FHMOD.
+      bit_offset: 29
+      bit_size: 1
+    - name: FDMOD
+      description: FDMOD.
+      bit_offset: 30
+      bit_size: 1
+fieldset/HAINT:
+  description: When a significant event occurs on a channel, the host all channels interrupt register interrupts the application using the host channels interrupt bit of the core interrupt register (HCINT bit in GINTSTS). This is shown in Figure724. There is one interrupt bit per channel, up to a maximum of 16 bits. Bits in this register are set and cleared when the application sets and clears bits in the corresponding host channel-x interrupt register.
+  fields:
+    - name: HAINT
+      description: HAINT.
+      bit_offset: 0
+      bit_size: 16
+fieldset/HAINTMSK:
+  description: The host all channel interrupt mask register works with the host all channel interrupt register to interrupt the application when an event occurs on a channel. There is one interrupt mask bit per channel, up to a maximum of 16 bits.
+  fields:
+    - name: HAINTM
+      description: HAINTM.
+      bit_offset: 0
+      bit_size: 16
+fieldset/HCFG:
+  description: This register configures the core after power-on. Do not make changes to this register after initializing the host.
+  fields:
+    - name: FSLSPCS
+      description: FSLSPCS.
+      bit_offset: 0
+      bit_size: 2
+    - name: FSLSS
+      description: FSLSS.
+      bit_offset: 2
+      bit_size: 1
+fieldset/HFIR:
+  description: This register stores the frame interval information for the current speed to which the OTG controller has enumerated.
+  fields:
+    - name: FRIVL
+      description: FRIVL.
+      bit_offset: 0
+      bit_size: 16
+    - name: RLDCTRL
+      description: RLDCTRL.
+      bit_offset: 16
+      bit_size: 1
+fieldset/HFNUM:
+  description: This register indicates the current frame number. It also indicates the time remaining (in terms of the number of PHY clocks) in the current frame.
+  fields:
+    - name: FRNUM
+      description: FRNUM.
+      bit_offset: 0
+      bit_size: 16
+    - name: FTREM
+      description: FTREM.
+      bit_offset: 16
+      bit_size: 16
+fieldset/HPRT:
+  description: This register is available only in host mode. Currently, the OTG host supports only one port. A single register holds USB port-related information such as USB reset, enable, suspend, resume, connect status, and test mode for each port. It is shown in Figure724. The rc_w1 bits in this register can trigger an interrupt to the application through the host port interrupt bit of the core interrupt register (HPRTINT bit in GINTSTS). On a port interrupt, the application must read this register and clear the bit that caused the interrupt. For the rc_w1 bits, the application must write a 1 to the bit to clear the interrupt.
+  fields:
+    - name: PCSTS
+      description: PCSTS.
+      bit_offset: 0
+      bit_size: 1
+    - name: PCDET
+      description: PCDET.
+      bit_offset: 1
+      bit_size: 1
+    - name: PENA
+      description: PENA.
+      bit_offset: 2
+      bit_size: 1
+    - name: PENCHNG
+      description: PENCHNG.
+      bit_offset: 3
+      bit_size: 1
+    - name: POCA
+      description: POCA.
+      bit_offset: 4
+      bit_size: 1
+    - name: POCCHNG
+      description: POCCHNG.
+      bit_offset: 5
+      bit_size: 1
+    - name: PRES
+      description: PRES.
+      bit_offset: 6
+      bit_size: 1
+    - name: PSUSP
+      description: PSUSP.
+      bit_offset: 7
+      bit_size: 1
+    - name: PRST
+      description: PRST.
+      bit_offset: 8
+      bit_size: 1
+    - name: PLSTS
+      description: PLSTS.
+      bit_offset: 10
+      bit_size: 2
+    - name: PPWR
+      description: PPWR.
+      bit_offset: 12
+      bit_size: 1
+    - name: PTCTL
+      description: PTCTL.
+      bit_offset: 13
+      bit_size: 4
+    - name: PSPD
+      description: PSPD.
+      bit_offset: 17
+      bit_size: 2
+fieldset/HS_DOEPEACHMSK1:
+  description: OTG device each OUT endpoint-1 interrupt mask register.
+  fields:
+    - name: XFRCM
+      description: XFRCM.
+      bit_offset: 0
+      bit_size: 1
+    - name: EPDM
+      description: EPDM.
+      bit_offset: 1
+      bit_size: 1
+    - name: AHBERRM
+      description: AHBERRM.
+      bit_offset: 2
+      bit_size: 1
+    - name: STUPM
+      description: STUPM.
+      bit_offset: 3
+      bit_size: 1
+    - name: OTEPDM
+      description: OTEPDM.
+      bit_offset: 4
+      bit_size: 1
+    - name: B2BSTUPM
+      description: B2BSTUPM.
+      bit_offset: 6
+      bit_size: 1
+    - name: OUTPKTERRM
+      description: OUTPKTERRM.
+      bit_offset: 8
+      bit_size: 1
+    - name: BNAM
+      description: BNAM.
+      bit_offset: 9
+      bit_size: 1
+    - name: BERRM
+      description: BERRM.
+      bit_offset: 12
+      bit_size: 1
+    - name: NAKMSK
+      description: NAKMSK.
+      bit_offset: 13
+      bit_size: 1
+    - name: NYETMSK
+      description: NYETMSK.
+      bit_offset: 14
+      bit_size: 1
+fieldset/PCGCCTL:
+  description: This register is available in host and device modes.
+  fields:
+    - name: STPPCLK
+      description: STPPCLK.
+      bit_offset: 0
+      bit_size: 1
+    - name: GATEHCLK
+      description: GATEHCLK.
+      bit_offset: 1
+      bit_size: 1
+    - name: PHYSUSP
+      description: PHYSUSP.
+      bit_offset: 4
+      bit_size: 1
+    - name: ENL1GTG
+      description: ENL1GTG.
+      bit_offset: 5
+      bit_size: 1
+    - name: PHYSLEEP
+      description: PHYSLEEP.
+      bit_offset: 6
+      bit_size: 1
+    - name: SUSP
+      description: SUSP.
+      bit_offset: 7
+      bit_size: 1
