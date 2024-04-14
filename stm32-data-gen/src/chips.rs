@@ -312,7 +312,7 @@ impl PeriMatcher {
             ("STM32(G0|H5|U5).*:USBRAM:.*", ("usbram", "32_2048", "USBRAM")),
             // # USB OTG
             (".*:USB_OTG_FS:otgfs1_.*", ("otg", "v1", "OTG")),
-            (".*:USB_OTG_HS:otghs1_.*", ("otg", "v2", "OTG")),
+            ("STM32U5a.*:USB_OTG_HS:otghs1_.*", ("otg", "v2", "OTG")),
             ("STM32C0.*:RCC:.*", ("rcc", "c0", "RCC")),
             ("STM32F030.[46].*:RCC:.*", ("rcc", "f0v1", "RCC")),
             ("STM32F05[128].*:RCC:.*", ("rcc", "f0v1", "RCC")),
