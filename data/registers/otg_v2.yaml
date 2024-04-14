@@ -1,4 +1,4 @@
-block/OTG_HS:
+block/OTG:
   description: OTG_HS.
   items:
     - name: GOTGCTL
@@ -259,6 +259,7 @@ fieldset/DCFG:
       description: Device speed
       bit_offset: 0
       bit_size: 2
+      enum: DSPD
     - name: NZLSOHSK
       description: Non-zero-length status OUT handshake
       bit_offset: 2
@@ -271,6 +272,7 @@ fieldset/DCFG:
       description: PFIVL.
       bit_offset: 11
       bit_size: 2
+      enum: PFIVL
     - name: ERRATIM
       description: ERRATIM.
       bit_offset: 15
@@ -346,7 +348,7 @@ fieldset/DIEPCTL:
       description: EPTYP
       bit_offset: 18
       bit_size: 2
-      # enum: EPTYP
+      enum: EPTYP
     - name: SNPM
       description: SNPM
       bit_offset: 20
@@ -476,53 +478,70 @@ fieldset/DIEPTSIZ:
     - name: XFRSIZ
       description: XFRSIZ.
       bit_offset: 0
-      bit_size: 7
+      bit_size: 19
     - name: PKTCNT
       description: PKTCNT.
       bit_offset: 19
+      bit_size: 10
+    - name: MCNT
+      description: Multi count
+      bit_offset: 29
       bit_size: 2
 
 fieldset/DOEPCTL:
-  description: This section describes the DOEPCTL0 register.
+  description: Device endpoint control register
   fields:
     - name: MPSIZ
-      description: MPSIZ.
+      description: MPSIZ
       bit_offset: 0
-      bit_size: 2
+      bit_size: 11
     - name: USBAEP
-      description: USBAEP.
+      description: USBAEP
       bit_offset: 15
       bit_size: 1
+    - name: EONUM_DPID
+      description: EONUM/DPID
+      bit_offset: 16
+      bit_size: 1
     - name: NAKSTS
-      description: NAKSTS.
+      description: NAKSTS
       bit_offset: 17
       bit_size: 1
     - name: EPTYP
-      description: EPTYP.
+      description: EPTYP
       bit_offset: 18
       bit_size: 2
+      enum: EPTYP
     - name: SNPM
-      description: SNPM.
+      description: SNPM
       bit_offset: 20
       bit_size: 1
     - name: STALL
-      description: STALL.
+      description: STALL
       bit_offset: 21
       bit_size: 1
     - name: CNAK
-      description: CNAK.
+      description: CNAK
       bit_offset: 26
       bit_size: 1
     - name: SNAK
-      description: SNAK.
+      description: SNAK
       bit_offset: 27
       bit_size: 1
+    - name: SD0PID_SEVNFRM
+      description: SD0PID/SEVNFRM
+      bit_offset: 28
+      bit_size: 1
+    - name: SODDFRM
+      description: SODDFRM
+      bit_offset: 29
+      bit_size: 1
     - name: EPDIS
-      description: EPDIS.
+      description: EPDIS
       bit_offset: 30
       bit_size: 1
     - name: EPENA
-      description: EPENA.
+      description: EPENA
       bit_offset: 31
       bit_size: 1
 
@@ -643,13 +662,17 @@ fieldset/DOEPTSIZ:
     - name: XFRSIZ
       description: XFRSIZ.
       bit_offset: 0
-      bit_size: 7
+      bit_size: 19
     - name: PKTCNT
       description: PKTCNT.
       bit_offset: 19
-      bit_size: 1
+      bit_size: 10
     - name: STUPCNT
       description: STUPCNT.
+      bit_offset: 29
+      bit_size: 2
+    - name: RXDPID
+      description: RXDPID.
       bit_offset: 29
       bit_size: 2
 
@@ -664,6 +687,7 @@ fieldset/DSTS:
       description: ENUMSPD.
       bit_offset: 1
       bit_size: 2
+      enum: DSPD
     - name: EERR
       description: EERR.
       bit_offset: 3
@@ -1284,6 +1308,7 @@ fieldset/GRXSTS:
       description: Packet status (device mode)
       bit_offset: 17
       bit_size: 4
+      enum: PKTSTSD
     - name: FRMNUM
       description: Frame number (device mode)
       bit_offset: 21
@@ -1508,3 +1533,61 @@ fieldset/PCGCCTL:
       description: SUSP.
       bit_offset: 7
       bit_size: 1
+enum/DSPD:
+  bit_size: 2
+  variants:
+    - name: HIGH_SPEED
+      description: High speed
+      value: 0
+    - name: FULL_SPEED_EXTERNAL
+      description: Full speed using external ULPI PHY
+      value: 1
+    - name: FULL_SPEED_INTERNAL
+      description: Full speed using internal embedded PHY
+      value: 3
+enum/EPTYP:
+  bit_size: 2
+  variants:
+    - name: CONTROL
+      value: 0
+    - name: ISOCHRONOUS
+      value: 1
+    - name: BULK
+      value: 2
+    - name: INTERRUPT
+      value: 3
+
+enum/PKTSTSD:
+  bit_size: 4
+  variants:
+    - name: OUT_NAK
+      description: Global OUT NAK (triggers an interrupt)
+      value: 1
+    - name: OUT_DATA_RX
+      description: OUT data packet received
+      value: 2
+    - name: OUT_DATA_DONE
+      description: OUT transfer completed (triggers an interrupt)
+      value: 3
+    - name: SETUP_DATA_DONE
+      description: SETUP transaction completed (triggers an interrupt)
+      value: 4
+    - name: SETUP_DATA_RX
+      description: SETUP data packet received
+      value: 6
+
+enum/PFIVL:
+  bit_size: 2
+  variants:
+    - name: FRAME_INTERVAL_80
+      description: 80% of the frame interval
+      value: 0
+    - name: FRAME_INTERVAL_85
+      description: 85% of the frame interval
+      value: 1
+    - name: FRAME_INTERVAL_90
+      description: 90% of the frame interval
+      value: 2
+    - name: FRAME_INTERVAL_95
+      description: 95% of the frame interval
+      value: 3
