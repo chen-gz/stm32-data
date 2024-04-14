@@ -58,7 +58,9 @@ mod xml {
 }
 
 pub struct Chip {
+    #[allow(dead_code)]
     flash: u32,
+    #[allow(dead_code)]
     ram: u32,
     group_idx: usize,
     packages: Vec<stm32_data_serde::chip::Package>,
@@ -210,7 +212,7 @@ impl PeriMatcher {
             ("STM32WLE.*:ADC:.*", ("adc", "g0", "ADC")),
             ("STM32G0.*:ADC:.*", ("adc", "g0", "ADC")),
             ("STM32G0.*:ADC_COMMON:.*", ("adccommon", "v3", "ADC_COMMON")),
-            ("STM32G4.*:ADC:.*", ("adc", "v4", "ADC")),
+            ("STM32G4.*:ADC:.*", ("adc", "g4", "ADC")),
             ("STM32G4.*:ADC_COMMON:.*", ("adccommon", "v4", "ADC_COMMON")),
             (".*:ADC_COMMON:aditf2_v1_1", ("adccommon", "v2", "ADC_COMMON")),
             (".*:ADC_COMMON:aditf5_v2_0", ("adccommon", "v3", "ADC_COMMON")),
@@ -247,6 +249,7 @@ impl PeriMatcher {
                 ("syscfg", "h7od", "SYSCFG"),
             ),
             ("STM32H7.*:SYSCFG:.*", ("syscfg", "h7", "SYSCFG")),
+            ("STM32U0.*:SYSCFG:.*", ("syscfg", "u0", "SYSCFG")),
             ("STM32U5.*:SYSCFG:.*", ("syscfg", "u5", "SYSCFG")),
             ("STM32WBA.*:SYSCFG:.*", ("syscfg", "wba", "SYSCFG")),
             ("STM32WB.*:SYSCFG:.*", ("syscfg", "wb", "SYSCFG")),
@@ -342,6 +345,7 @@ impl PeriMatcher {
             ("STM32L4[PQRS].*:RCC:.*", ("rcc", "l4plus", "RCC")),
             ("STM32L4.*:RCC:.*", ("rcc", "l4", "RCC")),
             ("STM32L5.*:RCC:.*", ("rcc", "l5", "RCC")),
+            ("STM32U0.*:RCC:.*", ("rcc", "u0", "RCC")),
             ("STM32U5.*:RCC:.*", ("rcc", "u5", "RCC")),
             ("STM32H50.*:RCC:.*", ("rcc", "h50", "RCC")),
             ("STM32H5.*:RCC:.*", ("rcc", "h5", "RCC")),
@@ -357,6 +361,7 @@ impl PeriMatcher {
             ("STM32C0.*:EXTI:.*", ("exti", "c0", "EXTI")),
             ("STM32G0.*:EXTI:.*", ("exti", "g0", "EXTI")),
             ("STM32H7.*:EXTI:.*", ("exti", "h7", "EXTI")),
+            ("STM32U0.*:EXTI:.*", ("exti", "u0", "EXTI")),
             ("STM32U5.*:EXTI:.*", ("exti", "u5", "EXTI")),
             ("STM32WB.*:EXTI:.*", ("exti", "w", "EXTI")),
             ("STM32WL5.*:EXTI:.*", ("exti", "w", "EXTI")),
@@ -394,6 +399,7 @@ impl PeriMatcher {
             ("STM32L1.*:PWR:.*", ("pwr", "l1", "PWR")),
             ("STM32L4.*:PWR:.*", ("pwr", "l4", "PWR")),
             ("STM32L5.*:PWR:.*", ("pwr", "l5", "PWR")),
+            ("STM32U0.*:PWR:.*", ("pwr", "u0", "PWR")),
             ("STM32U5.*:PWR:.*", ("pwr", "u5", "PWR")),
             ("STM32WL.*:PWR:.*", ("pwr", "wl5", "PWR")),
             ("STM32WBA.*:PWR:.*", ("pwr", "wba", "PWR")),
@@ -413,13 +419,16 @@ impl PeriMatcher {
             ("STM32L1.*:FLASH:.*", ("flash", "l1", "FLASH")),
             ("STM32L4.*:FLASH:.*", ("flash", "l4", "FLASH")),
             ("STM32L5.*:FLASH:.*", ("flash", "l5", "FLASH")),
+            ("STM32U0.*:FLASH:.*", ("flash", "u0", "FLASH")),
             ("STM32U5.*:FLASH:.*", ("flash", "u5", "FLASH")),
             ("STM32WBA.*:FLASH:.*", ("flash", "wba", "FLASH")),
             ("STM32WB.*:FLASH:.*", ("flash", "wb", "FLASH")),
             ("STM32WL.*:FLASH:.*", ("flash", "wl", "FLASH")),
             ("STM32C0.*:FLASH:.*", ("flash", "c0", "FLASH")),
             ("STM32G0.*:FLASH:.*", ("flash", "g0", "FLASH")),
-            ("STM32G4.*:FLASH:.*", ("flash", "g4", "FLASH")),
+            ("STM32G4(3|4).*:FLASH:.*", ("flash", "g4c2", "FLASH")),
+            ("STM32G4(7|8).*:FLASH:.*", ("flash", "g4c3", "FLASH")),
+            ("STM32G4(9|A).*:FLASH:.*", ("flash", "g4c4", "FLASH")),
             ("STM32H50.*:FLASH:.*", ("flash", "h50", "FLASH")),
             ("STM32H5.*:FLASH:.*", ("flash", "h5", "FLASH")),
             ("STM32F107.*:ETH:.*", ("eth", "v1a", "ETH")),
@@ -482,18 +491,25 @@ impl PeriMatcher {
             ("STM32L.*:TIM(9|21|22):.*", ("timer", "v1", "TIM_2CH")),
             ("STM32L.*:TIM15:.*", ("timer", "v1", "TIM_2CH_CMP")),
             ("STM32L.*:TIM(16|17):.*", ("timer", "v1", "TIM_1CH_CMP")),
+            ("STM32L5.*:LPTIM.*:.*", ("lptim", "v2a", "LPTIM")),
             ("STM32L.*:LPTIM(1|2|3):.*", ("lptim", "v1", "LPTIM")),
             // AN4013 Table 4: STM32Gx/Hx/Ux/Wx (and Cx) serials
             // timer_v2 for STM32Gx/Hx/Ux/Wx (and Cx) serials
             ("STM32U5.*:TIM(3|4):.*", ("timer", "v2", "TIM_GP32")),
-            ("STM32(G4|H5|U5|WBA).*:TIM(1|8|20):.*", ("timer", "v2", "TIM_ADV")),
-            ("STM32(G4|H5|U5|WBA).*:TIM(2|5|23|24):.*", ("timer", "v2", "TIM_GP32")),
-            ("STM32(G4|H5|U5|WBA).*:TIM(3|4):.*", ("timer", "v2", "TIM_GP16")),
-            ("STM32(G4|H5|U5|WBA).*:TIM(6|7):.*", ("timer", "v2", "TIM_BASIC")),
-            ("STM32(G4|H5|U5|WBA).*:TIM(13|14):.*", ("timer", "v2", "TIM_1CH")),
-            ("STM32(G4|H5|U5|WBA).*:TIM12:.*", ("timer", "v2", "TIM_2CH")),
-            ("STM32(G4|H5|U5|WBA).*:TIM15:.*", ("timer", "v2", "TIM_2CH_CMP")),
-            ("STM32(G4|H5|U5|WBA).*:TIM(16|17):.*", ("timer", "v2", "TIM_1CH_CMP")),
+            ("STM32(G4|H5|U0|U5|WBA).*:TIM(1|8|20):.*", ("timer", "v2", "TIM_ADV")),
+            (
+                "STM32(G4|H5|U0|U5|WBA).*:TIM(2|5|23|24):.*",
+                ("timer", "v2", "TIM_GP32"),
+            ),
+            ("STM32(G4|H5|U0|U5|WBA).*:TIM(3|4):.*", ("timer", "v2", "TIM_GP16")),
+            ("STM32(G4|H5|U0|U5|WBA).*:TIM(6|7):.*", ("timer", "v2", "TIM_BASIC")),
+            ("STM32(G4|H5|U0|U5|WBA).*:TIM(13|14):.*", ("timer", "v2", "TIM_1CH")),
+            ("STM32(G4|H5|U0|U5|WBA).*:TIM12:.*", ("timer", "v2", "TIM_2CH")),
+            ("STM32(G4|H5|U0|U5|WBA).*:TIM15:.*", ("timer", "v2", "TIM_2CH_CMP")),
+            ("STM32(G4|H5|U0|U5|WBA).*:TIM(16|17):.*", ("timer", "v2", "TIM_1CH_CMP")),
+            ("STM32WL.*:LPTIM.*:.*", ("lptim", "v2a", "LPTIM")),
+            ("STM32(H5|U5|WBA).*:LPTIM[12356]:.*", ("lptim", "v2b", "LPTIM_ADV")),
+            ("STM32(H5|U5).*:LPTIM4:.*", ("lptim", "v2b", "LPTIM_BASIC")),
             ("STM32G4.*:HRTIM1:.*", ("hrtim", "v2", "HRTIM")),
             // timer_v1 for STM32Gx/Hx/Ux/Wx (and Cx) serials
             ("STM32(C|G0|H7|WB|WL).*:TIM(1|8|20):.*", ("timer", "v1", "TIM_ADV")),
@@ -504,7 +520,7 @@ impl PeriMatcher {
             ("STM32(C|G0|H7|WB|WL).*:TIM12:.*", ("timer", "v1", "TIM_2CH")),
             ("STM32(C|G0|H7|WB|WL).*:TIM15:.*", ("timer", "v1", "TIM_2CH_CMP")),
             ("STM32(C|G0|H7|WB|WL).*:TIM(16|17):.*", ("timer", "v1", "TIM_1CH_CMP")),
-            ("STM32[CGHUW].*:LPTIM[1-6]:.*", ("lptim", "v1", "LPTIM")),
+            ("STM32(C|G|H7|U|W).*:LPTIM[1-6]:.*", ("lptim", "v1", "LPTIM")),
             ("STM32[CGHUW].*:HRTIM1?:.*", ("hrtim", "v1", "HRTIM")),
             //
             //// TIM mapping ends here ////
@@ -530,6 +546,14 @@ impl PeriMatcher {
             ("STM32F1.*:GPIO.*", ("gpio", "v1", "GPIO")),
             (".*:GPIO.*", ("gpio", "v2", "GPIO")),
             (".*:IPCC:v1_0", ("ipcc", "v1", "IPCC")),
+            ("STM32H7(4|5)(5|7).*:HSEM:.*", ("hsem", "v1", "HSEM")),
+            ("STM32WB55.*:HSEM:.*", ("hsem", "v1", "HSEM")),
+            ("STM32H735.*:HSEM:.*", ("hsem", "v2", "HSEM")),
+            ("STM32H7B3.*:HSEM:.*", ("hsem", "v2", "HSEM")),
+            ("STM32H753.*:HSEM:.*", ("hsem", "v2", "HSEM")),
+            ("STM32H743.*:HSEM:.*", ("hsem", "v2", "HSEM")),
+            ("STM32WL5.*:HSEM:.*", ("hsem", "v3", "HSEM")),
+            ("STM32WLE.*:HSEM:.*", ("hsem", "v4", "HSEM")),
             (".*:DMAMUX.*", ("dmamux", "v1", "DMAMUX")),
             (r".*:GPDMA\d?:.*", ("gpdma", "v1", "GPDMA")),
             (r".*:BDMA\d?:.*", ("bdma", "v1", "DMA")),
@@ -603,6 +627,7 @@ impl PeriMatcher {
             ("STM32F0x[128].*:TSC:.*", ("tsc", "v1", "TSC")),
             ("STM32F3[07][123].*:TSC:.*", ("tsc", "v1", "TSC")),
             ("STM32WB55.*:TSC:.*", ("tsc", "v2", "TSC")),
+            ("STM32WBA.*:TSC:.*", ("tsc", "v1", "TSC")),
             ("STM32L[045].*:TSC:.*", ("tsc", "v3", "TSC")),
             ("STM32U5.*:TSC:.*", ("tsc", "v3", "TSC")),
             ("*:VREFINTCAL:.*", ("vrefintcal", "v1", "VREFINTCAL")),
@@ -760,11 +785,19 @@ pub fn parse_groups() -> Result<(HashMap<String, Chip>, Vec<ChipGroup>), anyhow:
 static NOPELIST: &[&str] = &[
     // Not supported, not planned unless someone wants to do it.
     "STM32MP",
+    // not supported yet, planned. Pull requests welcome!
+    "STM32H52",
+    "STM32H53",
+    "STM32H7R",
+    "STM32H7S",
+    "STM32U5F",
+    "STM32U5G",
+    "STM32WBA50",
+    "STM32WBA54",
+    "STM32WBA55",
     // Does not exist in ST website. No datasheet, no RM.
     "STM32GBK",
     "STM32L485",
-    "STM32U5F",
-    "STM32U5G",
     // STM32WxM modules. These are based on a chip that's supported on its own,
     // not sure why we want a separate target for it.
     "STM32WL5M",
@@ -889,7 +922,6 @@ fn process_group(
     peripheral_to_clock: &rcc::ParsedRccs,
     dma_channels: &dma::DmaChannels,
     chips: &HashMap<String, Chip>,
-    memories: &memory::Memories,
     docs: &docs::Docs,
 ) -> Result<(), anyhow::Error> {
     let chip_name = group.chip_names[0].clone();
@@ -906,6 +938,7 @@ fn process_group(
     let chip_af = &group.ips.values().find(|x| x.name == "GPIO").unwrap().version;
     let chip_af = chip_af.strip_suffix("_gpio_v1_0").unwrap();
     let chip_af = af.0.get(chip_af);
+
     let cores: Vec<_> = group
         .xml
         .cores
@@ -927,7 +960,7 @@ fn process_group(
         .collect();
 
     for chip_name in &group.chip_names {
-        process_chip(chips, chip_name, h, memories, docs, &group, &cores)?;
+        process_chip(chips, chip_name, h, docs, &group, &cores)?;
     }
 
     Ok(())
@@ -950,7 +983,6 @@ fn process_core(
     let defines = h.get_defines(&core_name);
 
     let mut peri_kinds = HashMap::new();
-    peri_kinds.insert("UID".to_string(), "UID".to_string());
     for ip in group.ips.values() {
         let pname = ip.instance_name.clone();
         let pkind = format!("{}:{}", ip.name, ip.version);
@@ -1041,6 +1073,8 @@ fn process_core(
         "BKP",
         "USBRAM",
         "VREFINTCAL",
+        "UID",
+        "HSEM",
     ];
     for pname in GHOST_PERIS {
         if let Entry::Vacant(entry) = peri_kinds.entry(pname.to_string()) {
@@ -1322,160 +1356,21 @@ fn process_core(
 fn process_chip(
     chips: &HashMap<String, Chip>,
     chip_name: &str,
-    h: &header::ParsedHeader,
-    memories: &memory::Memories,
+    _h: &header::ParsedHeader,
     docs: &docs::Docs,
     group: &ChipGroup,
     cores: &[stm32_data_serde::chip::Core],
 ) -> Result<(), anyhow::Error> {
     let chip = chips.get(chip_name).unwrap();
-    let flash_size = chip.flash * 1024;
-    let ram_total = chip.ram * 1024;
-    let memory = memories.get(group.die.as_ref().unwrap());
-    let mut flash_remaining = flash_size;
-    let mut memory_regions = Vec::new();
-    let mut found = HashSet::<&str>::new();
-    for each in [
-        // We test FLASH_BANKx _before_ FLASH as we prefer their definition over the legacy one
-        "FLASH_BANK1",
-        "FLASH_BANK2",
-        "FLASH",
-        "FLASH_OTP",
-        "D1_AXIFLASH",
-        "D1_AXIICP",
-    ] {
-        if let Some(address) = h.defines.get("all").unwrap().0.get(&format!("{each}_BASE")) {
-            let (key, banks) = match each {
-                "FLASH" => (
-                    "BANK_1",
-                    Some([memory::FlashBank::Bank1, memory::FlashBank::Bank2].as_ref()),
-                ),
-                "FLASH_BANK1" => ("BANK_1", Some([memory::FlashBank::Bank1].as_ref())),
-                "FLASH_BANK2" => ("BANK_2", Some([memory::FlashBank::Bank2].as_ref())),
-                "FLASH_OTP" => ("OTP", Some([memory::FlashBank::Otp].as_ref())),
-                each => (each, None),
-            };
-
-            if found.contains(key) {
-                continue;
-            }
-            found.insert(key);
-
-            if let Some(banks) = banks {
-                for bank in banks {
-                    let bank_name = match bank {
-                        memory::FlashBank::Bank1 => "BANK_1",
-                        memory::FlashBank::Bank2 => "BANK_2",
-                        memory::FlashBank::Otp => "OTP",
-                    };
-                    let regions: Vec<_> = memory
-                        .flash_regions
-                        .iter()
-                        .filter(|region| region.bank == *bank)
-                        .enumerate()
-                        .map_while(|(index, region)| {
-                            let size = if *bank == memory::FlashBank::Bank1 || *bank == memory::FlashBank::Bank2 {
-                                // Truncate region to the total amount of remaining chip flash
-                                let size = std::cmp::min(region.bytes, flash_remaining);
-                                flash_remaining -= size;
-                                if size == 0 {
-                                    // No more regions are present on this chip
-                                    return None;
-                                }
-                                size
-                            } else {
-                                region.bytes
-                            };
-
-                            Some((index, region.address, size, region.settings.clone()))
-                        })
-                        .collect();
-                    let has_multiple_regions = regions.len() > 1;
-                    for (index, address, size, settings) in regions {
-                        let name = if has_multiple_regions {
-                            format!("{}_REGION_{}", bank_name, index + 1)
-                        } else {
-                            bank_name.to_string()
-                        };
-
-                        memory_regions.push(stm32_data_serde::chip::Memory {
-                            name,
-                            kind: stm32_data_serde::chip::memory::Kind::Flash,
-                            address,
-                            size,
-                            settings: Some(settings.clone()),
-                        });
-                    }
-                }
-            } else {
-                memory_regions.push(stm32_data_serde::chip::Memory {
-                    name: key.to_string(),
-                    kind: stm32_data_serde::chip::memory::Kind::Flash,
-                    address: u32::try_from(*address).unwrap(),
-                    size: 0,
-                    settings: None,
-                })
-            }
-        }
-    }
-    let mut found = HashSet::new();
-    for each in [
-        "SRAM",
-        "SRAM1",
-        "SRAM2",
-        "D1_AXISRAM",
-        "D1_ITCMRAM",
-        "D1_DTCMRAM",
-        "D1_AHBSRAM",
-        "D2_AXISRAM",
-        "D3_BKPSRAM",
-        "D3_SRAM",
-    ] {
-        if let Some(address) = h.defines.get("all").unwrap().0.get(&format!("{each}_BASE")) {
-            let key = match each {
-                "D1_AXISRAM" => "SRAM",
-                "SRAM1" => "SRAM",
-                each => each,
-            };
-
-            if found.contains(key) {
-                continue;
-            }
-            found.insert(key);
-
-            let size = if key == "SRAM" {
-                // if memory.ram.bytes != ram_total {
-                //     println!(
-                //         "SRAM mismatch for chip {} with die {}: Expected {} was {}",
-                //         chip_name,
-                //         group.die.as_ref().unwrap(),
-                //         ram_total,
-                //         memory.ram.bytes,
-                //     );
-                // }
-                std::cmp::min(memory.ram.bytes, ram_total)
-            } else {
-                0
-            };
-
-            memory_regions.push(stm32_data_serde::chip::Memory {
-                name: key.to_string(),
-                kind: stm32_data_serde::chip::memory::Kind::Ram,
-                address: u32::try_from(*address).unwrap(),
-                size,
-                settings: None,
-            })
-        }
-    }
     let docs = docs.documents_for(chip_name);
     let chip = stm32_data_serde::Chip {
         name: chip_name.to_string(),
         family: group.family.clone().unwrap(),
         line: group.line.clone().unwrap(),
         die: group.die.clone().unwrap(),
-        device_id: memory.device_id,
+        device_id: u16::from_str_radix(&group.die.as_ref().unwrap()[3..], 16).unwrap(),
         packages: chip.packages.clone(),
-        memory: memory_regions,
+        memory: memory::get(chip_name),
         docs,
         cores: cores.to_vec(),
     };
@@ -1516,7 +1411,6 @@ pub fn dump_all_chips(
     peripheral_to_clock: rcc::ParsedRccs,
     dma_channels: dma::DmaChannels,
     chips: std::collections::HashMap<String, Chip>,
-    memories: memory::Memories,
     docs: docs::Docs,
 ) -> Result<(), anyhow::Error> {
     std::fs::create_dir_all("build/data/chips")?;
@@ -1537,7 +1431,6 @@ pub fn dump_all_chips(
                     &peripheral_to_clock,
                     &dma_channels,
                     &chips,
-                    &memories,
                     &docs,
                 )
             })
@@ -1556,7 +1449,6 @@ pub fn dump_all_chips(
                 &peripheral_to_clock,
                 &dma_channels,
                 &chips,
-                &memories,
                 &docs,
             )
         })
