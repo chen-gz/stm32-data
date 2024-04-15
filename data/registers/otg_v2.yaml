@@ -339,6 +339,10 @@ fieldset/DIEPCTL:
       description: MPSIZ
       bit_offset: 0
       bit_size: 11
+    - name: MPSIZ0
+      description: MPSIZ for endpoint 0
+      bit_offset: 0
+      bit_size: 2
     - name: USBAEP
       description: USBAEP
       bit_offset: 15
@@ -502,6 +506,11 @@ fieldset/DOEPCTL:
       description: MPSIZ
       bit_offset: 0
       bit_size: 11
+    - name: MPSIZ0
+      description: MPSIZ for endpoint 0
+      bit_offset: 0
+      bit_size: 2
+      access: Read
     - name: USBAEP
       description: USBAEP
       bit_offset: 15
