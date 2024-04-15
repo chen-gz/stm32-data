@@ -175,6 +175,13 @@ block/OTG:
         stride: 32
       byte_offset: 2320
       fieldset: DIEPTSIZ
+    - name: DIEPDMA
+      description: Device IN endpoint DMA address register
+      array:
+        len: 16
+        stride: 32
+      byte_offset: 2324
+      fieldset: DIEPDMA
     - name: DTXFSTS
       description: Device IN endpoint transmit FIFO status register
       array:
@@ -546,6 +553,14 @@ fieldset/DOEPCTL:
       bit_size: 1
 
 fieldset/DOEPDMA:
+  description: OTG device OUT endpoint 0 DMA address register.
+  fields:
+    - name: DMAADDR
+      description: DMAADDR.
+      bit_offset: 0
+      bit_size: 32
+
+fieldset/DIEPDMA:
   description: OTG device OUT endpoint 0 DMA address register.
   fields:
     - name: DMAADDR
