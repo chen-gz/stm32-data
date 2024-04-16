@@ -798,6 +798,14 @@ fieldset/GAHBCFG:
       description: GINTMSK.
       bit_offset: 0
       bit_size: 1
+    - name: HBSTLEN
+      description: Burst length/type
+      bit_offset: 1
+      bit_size: 4
+    - name: DMAEN
+      description: DMA enable
+      bit_offset: 5
+      bit_size: 1
     - name: TXFELVL
       description: TXFELVL.
       bit_offset: 7
