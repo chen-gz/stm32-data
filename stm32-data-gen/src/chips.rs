@@ -4,6 +4,8 @@ use std::collections::{HashMap, HashSet};
 use stm32_data_serde::chip::core::peripheral::Pin;
 
 use super::*;
+use crate::gpio_af::parse_signal_name;
+use crate::normalize_peris::normalize_peri_name;
 
 mod xml {
     use serde::Deserialize;
@@ -86,7 +88,7 @@ fn chip_name_from_package_name(x: &str) -> String {
         (regex!("^(STM32G0....).xN$"), "$1"),
         (regex!("^(STM32L5....).x[PQ]$"), "$1"),
         (regex!("^(STM32L0....).xS$"), "$1"),
-        (regex!("^(STM32H7....).xQ$"), "$1"),
+        (regex!("^(STM32H7....).x[QH]$"), "$1"),
         (regex!("^(STM32U5....).xQ$"), "$1"),
         (regex!("^(STM32H5....).xQ$"), "$1"),
         (regex!("^(STM32WBA....).x$"), "$1"),
@@ -134,6 +136,7 @@ impl PeriMatcher {
             (".*:LPUART:sci3_v1_3", ("usart", "v4", "LPUART")),
             (".*:LPUART:sci3_v1_4", ("usart", "v4", "LPUART")),
             ("STM32[HU]5.*:RNG:.*", ("rng", "v3", "RNG")),
+            ("STM32U0.*:RNG:.*", ("rng", "v3", "RNG")),
             ("STM32L5.*:RNG:.*", ("rng", "v2", "RNG")),
             ("STM32L4[PQ]5.*:RNG:.*", ("rng", "v2", "RNG")),
             ("STM32WL.*:RNG:.*", ("rng", "v2", "RNG")),
@@ -149,6 +152,7 @@ impl PeriMatcher {
             ("STM32F7.*:AES:.*", ("aes", "f7", "AES")),
             ("STM32F4.*:AES:.*", ("aes", "v1", "AES")),
             ("STM32G0.*:AES:.*", ("aes", "v2", "AES")),
+            ("STM32U0.*:AES:.*", ("aes", "v2", "AES")),
             ("STM32G4.*:AES:.*", ("aes", "v2", "AES")),
             ("STM32L0.*:AES:.*", ("aes", "v1", "AES")),
             ("STM32L1.*:AES:.*", ("aes", "v1", "AES")),
@@ -182,6 +186,7 @@ impl PeriMatcher {
             (".*:I2C:F0-i2c2_v1_1", ("i2c", "v2", "I2C")),
             (".*:I2C:i2c2_v1_1F7", ("i2c", "v2", "I2C")),
             (".*:I2C:i2c2_v1_1U5", ("i2c", "v2", "I2C")),
+            (".*:I2C:i2c1_v1_0H7RS", ("i2c", "v3", "I2C")),
             ("STM32F10[1357].*:DAC:dacif_v1_1F1", ("dac", "v1", "DAC")), // Original F1 are v1
             (".*:DAC:dacif_v1_1F1", ("dac", "v2", "DAC")),
             (".*:DAC:F0dacif_v1_1", ("dac", "v2", "DAC")),
@@ -191,6 +196,7 @@ impl PeriMatcher {
             ("STM32L4[1-9A].*:DAC:dacif_v2_0", ("dac", "v3", "DAC")), // L4 non-plus are v3
             (".*:DAC:dacif_v2_0", ("dac", "v5", "DAC")),
             (".*:DAC:dacif_v2_0_U5", ("dac", "v6", "DAC")),
+            (".*:DAC:dacif_v2_0_U0", ("dac", "v4", "DAC")),
             (".*:DAC:dacif_v3_0", ("dac", "v4", "DAC")),
             (".*:DAC:WL_dacif_v3_0", ("dac", "v4", "DAC")),
             (".*:DAC:G4_dacif_v4_0", ("dac", "v7", "DAC")),
@@ -211,26 +217,25 @@ impl PeriMatcher {
             ("STM32WL5.*:ADC:.*", ("adc", "g0", "ADC")),
             ("STM32WLE.*:ADC:.*", ("adc", "g0", "ADC")),
             ("STM32G0.*:ADC:.*", ("adc", "g0", "ADC")),
-            ("STM32G0.*:ADC_COMMON:.*", ("adccommon", "v3", "ADC_COMMON")),
+            ("STM32U0.*:ADC:.*", ("adc", "u0", "ADC")),
             ("STM32G4.*:ADC:.*", ("adc", "g4", "ADC")),
-            ("STM32G4.*:ADC_COMMON:.*", ("adccommon", "v4", "ADC_COMMON")),
-            (".*:ADC_COMMON:aditf2_v1_1", ("adccommon", "v2", "ADC_COMMON")),
-            (".*:ADC_COMMON:aditf5_v2_0", ("adccommon", "v3", "ADC_COMMON")),
-            (".*:ADC_COMMON:aditf5_v2_2", ("adccommon", "v3", "ADC_COMMON")),
-            (".*:ADC_COMMON:aditf4_v3_0_WL", ("adccommon", "v3", "ADC_COMMON")),
-            (".*:ADC_COMMON:aditf5_v1_1", ("adccommon", "f3", "ADC_COMMON")),
-            (".*:ADC3_COMMON:aditf5_v1_1", ("adccommon", "f3", "ADC_COMMON")),
+            ("STM32G0.*:ADC\\d*_COMMON:.*", ("adccommon", "v3", "ADC_COMMON")),
+            ("STM32U0.*:ADC\\d*_COMMON:.*", ("adccommon", "v3", "ADC_COMMON")),
+            ("STM32G4.*:ADC\\d*_COMMON:.*", ("adccommon", "v4", "ADC_COMMON")),
             (
-                "STM32H50.*:ADC_COMMON:aditf5_v3_0_H5",
-                ("adccommon", "h50", "ADC_COMMON"),
+                "STM32(L[45]|W[BL]).*:ADC\\d*_COMMON:.*",
+                ("adccommon", "v3", "ADC_COMMON"),
             ),
-            ("STM32H5.*:ADC_COMMON:aditf5_v3_0_H5", ("adccommon", "h5", "ADC_COMMON")),
-            ("STM32H7.*:ADC_COMMON:.*", ("adccommon", "v4", "ADC_COMMON")),
-            ("STM32H7.*:ADC3_COMMON:.*", ("adccommon", "v4", "ADC_COMMON")),
+            ("STM32F3.*:ADC\\d*_COMMON:.*", ("adccommon", "f3", "ADC_COMMON")),
+            ("STM32F[247].*:ADC\\d*_COMMON:.*", ("adccommon", "v2", "ADC_COMMON")),
+            ("STM32H50.*:ADC\\d*_COMMON:.*", ("adccommon", "h50", "ADC_COMMON")),
+            ("STM32H5.*:ADC\\d*_COMMON:.*", ("adccommon", "h5", "ADC_COMMON")),
+            ("STM32H7.*:ADC\\d*_COMMON:.*", ("adccommon", "v4", "ADC_COMMON")),
             ("STM32G4.*:OPAMP:G4_tsmc90_fastOpamp", ("opamp", "g4", "OPAMP")),
             ("STM32F3.*:OPAMP:tsmc018_ull_opamp_v1_0", ("opamp", "f3", "OPAMP")),
             ("STM32H7.*:OPAMP:.*", ("opamp", "h_v1", "OPAMP")),
             ("STM32H5.*:OPAMP:.*", ("opamp", "h_v2", "OPAMP")),
+            ("STM32U0.*:OPAMP:.*", ("opamp", "u0", "OPAMP")),
             (".*:DCMI:.*", ("dcmi", "v1", "DCMI")),
             ("STM32C0.*:SYSCFG:.*", ("syscfg", "c0", "SYSCFG")),
             ("STM32F0.*:SYSCFG:.*", ("syscfg", "f0", "SYSCFG")),
@@ -244,6 +249,7 @@ impl PeriMatcher {
             ("STM32L5.*:SYSCFG:.*", ("syscfg", "l5", "SYSCFG")),
             ("STM32G0.*:SYSCFG:.*", ("syscfg", "g0", "SYSCFG")),
             ("STM32G4.*:SYSCFG:.*", ("syscfg", "g4", "SYSCFG")),
+            ("STM32H7[RS].*:SYSCFG:.*", ("syscfg", "h7rs", "SYSCFG")),
             (
                 "STM32H7(45|47|55|57|42|43|53|50).*:SYSCFG:.*",
                 ("syscfg", "h7od", "SYSCFG"),
@@ -255,8 +261,8 @@ impl PeriMatcher {
             ("STM32WB.*:SYSCFG:.*", ("syscfg", "wb", "SYSCFG")),
             ("STM32WL5.*:SYSCFG:.*", ("syscfg", "wl5", "SYSCFG")),
             ("STM32WLE.*:SYSCFG:.*", ("syscfg", "wle", "SYSCFG")),
-            ("STM32H50.*:SBS:.*", ("syscfg", "h50", "SYSCFG")),
-            ("STM32H5.*:SBS:.*", ("syscfg", "h5", "SYSCFG")),
+            ("STM32H50.*:SYSCFG:.*", ("syscfg", "h50", "SYSCFG")),
+            ("STM32H5.*:SYSCFG:.*", ("syscfg", "h5", "SYSCFG")),
             (".*:IWDG:iwdg1_v1_1", ("iwdg", "v1", "IWDG")),
             (".*:IWDG:iwdg1_v2_0", ("iwdg", "v2", "IWDG")),
             (".*:IWDG:iwdg1_v3_0", ("iwdg", "v3", "IWDG")),
@@ -264,6 +270,10 @@ impl PeriMatcher {
             (".*:WWDG:wwdg1_v2_0", ("wwdg", "v2", "WWDG")),
             (".*:JPEG:jpeg1_v1_0", ("jpeg", "v1", "JPEG")),
             (".*:LTDC:lcdtft1_v1_1", ("ltdc", "v1", "LTDC")),
+            (".*:DSIHOST:dsihost1_v1_0", ("dsihost", "v1", "DSIHOST")),
+            (".*:DSIHOST:dsihost1_v1_0_SHARK", ("dsihost", "v1", "DSIHOST")),
+            (".*:DSIHOST:dsihost1_v2_0", ("dsihost", "v2", "DSIHOST")),
+            (".*:DSIHOST:dsihost_U5", ("dsihost", "u5", "DSIHOST")),
             (".*:MDIOS:mdios1_v1_0", ("mdios", "v1", "MDIOS")),
             (".*:QUADSPI:.*", ("quadspi", "v1", "QUADSPI")),
             ("STM32F1.*:BKP.*", ("bkp", "v1", "BKP")),
@@ -286,6 +296,7 @@ impl PeriMatcher {
             (".*:RTC:rtc3_v1_1", ("rtc", "v3", "RTC")),
             (".*:RTC:rtc3_v2_0", ("rtc", "v3", "RTC")),
             (".*:RTC:rtc3_v3_0", ("rtc", "v3", "RTC")),
+            (".*:RTC:rtc3_v3_5", ("rtc", "v3", "RTC")),
             (".*:SAI:sai1_v1_0", ("sai", "v1", "SAI")),
             (".*:SAI:sai1_v1_1", ("sai", "v2", "SAI")),
             (".*:SAI:sai1_v1_2", ("sai", "v2", "SAI")),
@@ -308,8 +319,9 @@ impl PeriMatcher {
             ("STM32F373.*:USBRAM:.*", ("usbram", "16x2_512", "USBRAM")),
             ("STM32(F0|L[045]|G4|WB).*:USB:.*", ("usb", "v3", "USB")),
             ("STM32(F0|L[045]|G4|WB).*:USBRAM:.*", ("usbram", "16x2_1024", "USBRAM")),
-            ("STM32(G0|H5|U5).*:USB:.*", ("usb", "v4", "USB")),
+            ("STM32(G0|H5|U5|U0).*:USB:.*", ("usb", "v4", "USB")),
             ("STM32(G0|H5|U5).*:USBRAM:.*", ("usbram", "32_2048", "USBRAM")),
+            ("STM32U0.*:USBRAM:.*", ("usbram", "32_1024", "USBRAM")),
             // # USB OTG
             (".*:USB_OTG_FS:otgfs1_.*", ("otg", "v1", "OTG")),
             ("STM32U5A.*:USB_OTG_HS:otghs1_.*", ("otg", "v2", "OTG")),
@@ -336,6 +348,7 @@ impl PeriMatcher {
             ("STM32F7.*:RCC:.*", ("rcc", "f7", "RCC")),
             ("STM32G0.*:RCC:.*", ("rcc", "g0", "RCC")),
             ("STM32G4.*:RCC:.*", ("rcc", "g4", "RCC")),
+            ("STM32H7[RS].*:RCC:.*", ("rcc", "h7rs", "RCC")),
             ("STM32H7[AB].*:RCC:.*", ("rcc", "h7ab", "RCC")),
             ("STM32H7(42|43|53|50).*:RCC:.*", ("rcc", "h7rm0433", "RCC")),
             ("STM32H7.*:RCC:.*", ("rcc", "h7", "RCC")),
@@ -376,6 +389,7 @@ impl PeriMatcher {
             ("STM32G0.*:CRS:.*", ("crs", "v1", "CRS")),
             ("STM32G4.*:CRS:.*", ("crs", "v1", "CRS")),
             ("STM32U5.*:CRS:.*", ("crs", "v1", "CRS")),
+            ("STM32U0.*:CRS:.*", ("crs", "v1", "CRS")),
             ("STM32H5.*:CRS:.*", ("crs", "v1", "CRS")),
             ("STM32H7.*:CRS:.*", ("crs", "v1", "CRS")),
             ("STM32WB.*:CRS:.*", ("crs", "v1", "CRS")),
@@ -384,6 +398,7 @@ impl PeriMatcher {
             ("STM32C0.*:PWR:.*", ("pwr", "c0", "PWR")),
             ("STM32G0.*:PWR:.*", ("pwr", "g0", "PWR")),
             ("STM32G4.*:PWR:.*", ("pwr", "g4", "PWR")),
+            ("STM32H7[RS].*:PWR:.*", ("pwr", "h7rs", "PWR")),
             ("STM32H7(45|47|55|57).*:PWR:.*", ("pwr", "h7rm0399", "PWR")),
             ("STM32H7(42|43|53|50).*:PWR:.*", ("pwr", "h7rm0433", "PWR")),
             ("STM32H7(23|25|33|35|30).*:PWR:.*", ("pwr", "h7rm0468", "PWR")),
@@ -407,6 +422,7 @@ impl PeriMatcher {
             ("STM32WB.*:PWR:.*", ("pwr", "wb", "PWR")),
             ("STM32H50.*:PWR:.*", ("pwr", "h50", "PWR")),
             ("STM32H5.*:PWR:.*", ("pwr", "h5", "PWR")),
+            ("STM32H7[RS].*:FLASH:.*", ("flash", "h7rs", "FLASH")),
             ("STM32H7(A3|B3|B0).*:FLASH:.*", ("flash", "h7ab", "FLASH")),
             ("STM32H7.*:FLASH:.*", ("flash", "h7", "FLASH")),
             ("STM32F0.*:FLASH:.*", ("flash", "f0", "FLASH")),
@@ -473,8 +489,9 @@ impl PeriMatcher {
             ("STM32F.*:TIM(9|12):.*", ("timer", "v1", "TIM_2CH")),
             ("STM32F.*:TIM15:.*", ("timer", "v1", "TIM_2CH_CMP")),
             ("STM32F.*:TIM(16|17):.*", ("timer", "v1", "TIM_1CH_CMP")),
-            ("STM32F.*:LPTIM1:.*", ("lptim", "v1", "LPTIM")),
             ("STM32F.*:HRTIM:.*", ("hrtim", "v1", "HRTIM")),
+            // LPTIM for STM32Fx serials
+            ("STM32(F4|F7).*:LPTIM.*:.*", ("lptim", "v1a", "LPTIM")),
             // AN4013 Table 3: STM32Lx serials
             // Override for STM32L0 serial
             ("STM32L0.*:TIM(2|3):.*", ("timer", "l0", "TIM_GP16")),
@@ -491,8 +508,11 @@ impl PeriMatcher {
             ("STM32L.*:TIM(9|21|22):.*", ("timer", "v1", "TIM_2CH")),
             ("STM32L.*:TIM15:.*", ("timer", "v1", "TIM_2CH_CMP")),
             ("STM32L.*:TIM(16|17):.*", ("timer", "v1", "TIM_1CH_CMP")),
-            ("STM32L5.*:LPTIM.*:.*", ("lptim", "v2a", "LPTIM")),
-            ("STM32L.*:LPTIM(1|2|3):.*", ("lptim", "v1", "LPTIM")),
+            // LPTIM for STM32Lx
+            ("STM32L5.*:LPTIM.*:.*", ("lptim", "v1c", "LPTIM")),
+            ("STM32L4[PQRS].*:LPTIM.*:.*", ("lptim", "v1b", "LPTIM")),
+            ("STM32L4[^PQRS].*:LPTIM.*:.*", ("lptim", "v1a", "LPTIM")),
+            ("STM32L0.*:LPTIM.*:.*", ("lptim", "v1", "LPTIM")),
             // AN4013 Table 4: STM32Gx/Hx/Ux/Wx (and Cx) serials
             // timer_v2 for STM32Gx/Hx/Ux/Wx (and Cx) serials
             ("STM32U5.*:TIM(3|4):.*", ("timer", "v2", "TIM_GP32")),
@@ -507,9 +527,6 @@ impl PeriMatcher {
             ("STM32(G4|H5|U0|U5|WBA).*:TIM12:.*", ("timer", "v2", "TIM_2CH")),
             ("STM32(G4|H5|U0|U5|WBA).*:TIM15:.*", ("timer", "v2", "TIM_2CH_CMP")),
             ("STM32(G4|H5|U0|U5|WBA).*:TIM(16|17):.*", ("timer", "v2", "TIM_1CH_CMP")),
-            ("STM32WL.*:LPTIM.*:.*", ("lptim", "v2a", "LPTIM")),
-            ("STM32(H5|U5|WBA).*:LPTIM[12356]:.*", ("lptim", "v2b", "LPTIM_ADV")),
-            ("STM32(H5|U5).*:LPTIM4:.*", ("lptim", "v2b", "LPTIM_BASIC")),
             ("STM32G4.*:HRTIM1:.*", ("hrtim", "v2", "HRTIM")),
             // timer_v1 for STM32Gx/Hx/Ux/Wx (and Cx) serials
             ("STM32(C|G0|H7|WB|WL).*:TIM(1|8|20):.*", ("timer", "v1", "TIM_ADV")),
@@ -520,8 +537,15 @@ impl PeriMatcher {
             ("STM32(C|G0|H7|WB|WL).*:TIM12:.*", ("timer", "v1", "TIM_2CH")),
             ("STM32(C|G0|H7|WB|WL).*:TIM15:.*", ("timer", "v1", "TIM_2CH_CMP")),
             ("STM32(C|G0|H7|WB|WL).*:TIM(16|17):.*", ("timer", "v1", "TIM_1CH_CMP")),
-            ("STM32(C|G|H7|U|W).*:LPTIM[1-6]:.*", ("lptim", "v1", "LPTIM")),
             ("STM32[CGHUW].*:HRTIM1?:.*", ("hrtim", "v1", "HRTIM")),
+            // LPTIM for STM32Gx/Hx/Ux/Wx (and Cx) serials
+            ("STM32U0.*:LPTIM.*:.*", ("lptim", "v2b", "LPTIM")),
+            ("STM32(H5|U5|WBA).*:LPTIM[12356]:.*", ("lptim", "v2a", "LPTIM_ADV")),
+            ("STM32(H5|U5).*:LPTIM4:.*", ("lptim", "v2a", "LPTIM_BASIC")),
+            ("STM32WL.*:LPTIM.*:.*", ("lptim", "v1c", "LPTIM")),
+            ("STM32H7.*:LPTIM.*:.*", ("lptim", "v1b_h7", "LPTIM")),
+            ("STM32G4.*:LPTIM.*:.*", ("lptim", "v1b_g4", "LPTIM")),
+            ("STM32(G0|WB).*:LPTIM.*:.*", ("lptim", "v1b", "LPTIM")),
             //
             //// TIM mapping ends here ////
             ("STM32F0.*:DBGMCU:.*", ("dbgmcu", "f0", "DBGMCU")),
@@ -555,7 +579,9 @@ impl PeriMatcher {
             ("STM32WL5.*:HSEM:.*", ("hsem", "v3", "HSEM")),
             ("STM32WLE.*:HSEM:.*", ("hsem", "v4", "HSEM")),
             (".*:DMAMUX.*", ("dmamux", "v1", "DMAMUX")),
-            (r".*:GPDMA\d?:.*", ("gpdma", "v1", "GPDMA")),
+            (r".*:GPDMA\d?:.*", ("gpdma", "v1", "GPDMA")), // TODO there's multiple versions for with+without trustzone.
+            (r".*:HPDMA\d?:.*", ("gpdma", "v1", "GPDMA")), // TODO it has a few more bits like DWX
+            (r".*:LPDMA\d?:.*", ("lpdma", "v1", "LPDMA")),
             (r".*:BDMA\d?:.*", ("bdma", "v1", "DMA")),
             ("STM32H7.*:DMA2D:DMA2D:dma2d1_v1_0", ("dma2d", "v2", "DMA2D")),
             (".*:DMA2D:dma2d1_v1_0", ("dma2d", "v1", "DMA2D")),
@@ -580,6 +606,7 @@ impl PeriMatcher {
             ("STM32L[045].*:CRC:.*", ("crc", "v3", "CRC")),
             ("STM32W[BL].*:CRC:.*", ("crc", "v3", "CRC")),
             ("STM32C[0].*:CRC:.*", ("crc", "v3", "CRC")),
+            ("STM32U[0].*:CRC:.*", ("crc", "v3", "CRC")),
             ("STM32U[5].*:CRC:.*", ("crc", "v3", "CRC")),
             (".*:LCD:lcdc1_v1.0.*", ("lcd", "v1", "LCD")),
             (".*:LCD:lcdc1_v1.2.*", ("lcd", "v2", "LCD")),
@@ -630,6 +657,7 @@ impl PeriMatcher {
             ("STM32WBA.*:TSC:.*", ("tsc", "v1", "TSC")),
             ("STM32L[045].*:TSC:.*", ("tsc", "v3", "TSC")),
             ("STM32U5.*:TSC:.*", ("tsc", "v3", "TSC")),
+            ("STM32U0.*:TSC:.*", ("tsc", "v2", "TSC")),
             ("*:VREFINTCAL:.*", ("vrefintcal", "v1", "VREFINTCAL")),
             ("STM32U5.*:ADF[12]:.*", ("adf", "v1", "ADF")),
             (".*:HASH:hash1_v1_0", ("hash", "v1", "HASH")),
@@ -640,11 +668,13 @@ impl PeriMatcher {
             (".*:HASH:hash1_v4_0", ("hash", "v3", "HASH")),
             (".*:CRYP:cryp1_v1_0.*", ("cryp", "v1", "CRYP")),
             (".*:CRYP:cryp1_v2_0_H7.*", ("cryp", "v3", "CRYP")),
+            (".*:CRYP:cryp1-v2_5", ("cryp", "v4", "CRYP")),
             (".*:CRYP:cryp1_v2_0.*", ("cryp", "v2", "CRYP")),
             ("STM32F41.*:CRYP:cryp1_v2_2.*", ("cryp", "v1", "CRYP")),
             (".*:CRYP:cryp1_v2_2.*", ("cryp", "v2", "CRYP")),
             ("STM32G0.1.*:.*:COMP:.*", ("comp", "v1", "COMP")),
             ("STM32G4.*:.*:COMP:.*", ("comp", "v2", "COMP")),
+            ("STM32U0.*:.*:COMP:.*", ("comp", "u0", "COMP")),
             ("STM32WL.*:.*:COMP:.*", ("comp", "v3", "COMP")),
             ("STM32H7[45].*:COMP:.*", ("comp", "h7_b", "COMP")),
             ("STM32H7[AB].*:COMP:.*", ("comp", "h7_a", "COMP")),
@@ -785,16 +815,6 @@ pub fn parse_groups() -> Result<(HashMap<String, Chip>, Vec<ChipGroup>), anyhow:
 static NOPELIST: &[&str] = &[
     // Not supported, not planned unless someone wants to do it.
     "STM32MP",
-    // not supported yet, planned. Pull requests welcome!
-    "STM32H52",
-    "STM32H53",
-    "STM32H7R",
-    "STM32H7S",
-    "STM32U5F",
-    "STM32U5G",
-    "STM32WBA50",
-    "STM32WBA54",
-    "STM32WBA55",
     // Does not exist in ST website. No datasheet, no RM.
     "STM32GBK",
     "STM32L485",
@@ -984,7 +1004,7 @@ fn process_core(
 
     let mut peri_kinds = HashMap::new();
     for ip in group.ips.values() {
-        let pname = ip.instance_name.clone();
+        let pname = normalize_peri_name(&ip.instance_name);
         let pkind = format!("{}:{}", ip.name, ip.version);
         let pkind = pkind.strip_suffix("_Cube").unwrap_or(&pkind);
 
@@ -997,6 +1017,14 @@ fn process_core(
             "IRTIM",
             // We add this as ghost peri
             "SYS",
+            "ADC_COMMON",
+            "ADC1_COMMON",
+            "ADC12_COMMON",
+            "ADC123_COMMON",
+            "ADC3_COMMON",
+            "ADC4_COMMON",
+            "ADC34_COMMON",
+            "ADC345_COMMON",
             // These are software libraries
             "FREERTOS",
             "PDM2PCM",
@@ -1011,29 +1039,11 @@ fn process_core(
             "TOUCHSENSING",
         ];
 
-        if FAKE_PERIPHERALS.contains(&pname.as_str()) {
+        if FAKE_PERIPHERALS.contains(&pname) {
             continue;
         }
 
-        let pname = match pname.as_str() {
-            "HDMI_CEC" => "CEC".to_string(),
-            "SUBGHZ" => "SUBGHZSPI".to_string(),
-            // remove when https://github.com/stm32-rs/stm32-rs/pull/789 merges
-            "USB_DRD_FS" => "USB".to_string(),
-            _ => pname,
-        };
-
-        if pname.starts_with("ADC") {
-            if let Entry::Vacant(entry) = peri_kinds.entry("ADC_COMMON".to_string()) {
-                entry.insert(format!("ADC_COMMON:{}", ip.version.strip_suffix("_Cube").unwrap()));
-            }
-        }
-        if pname.starts_with("ADC3") && (chip_name.starts_with("STM32H7") || chip_name.starts_with("STM32F3")) {
-            if let Entry::Vacant(entry) = peri_kinds.entry("ADC3_COMMON".to_string()) {
-                entry.insert(format!("ADC3_COMMON:{}", ip.version.strip_suffix("_Cube").unwrap()));
-            }
-        }
-        peri_kinds.insert(pname, pkind.to_string());
+        peri_kinds.insert(pname.to_string(), pkind.to_string());
     }
     const GHOST_PERIS: &[&str] = &[
         "GPIOA",
@@ -1075,9 +1085,17 @@ fn process_core(
         "VREFINTCAL",
         "UID",
         "HSEM",
+        "ADC1_COMMON",
+        "ADC12_COMMON",
+        "ADC123_COMMON",
+        "ADC3_COMMON",
+        "ADC4_COMMON",
+        "ADC34_COMMON",
+        "ADC345_COMMON",
     ];
     for pname in GHOST_PERIS {
-        if let Entry::Vacant(entry) = peri_kinds.entry(pname.to_string()) {
+        let normalized_pname = normalize_peri_name(pname);
+        if let Entry::Vacant(entry) = peri_kinds.entry(normalized_pname.to_string()) {
             if defines.get_peri_addr(pname).is_some() {
                 entry.insert("unknown".to_string());
             }
@@ -1117,27 +1135,21 @@ fn process_core(
     let mut periph_pins = HashMap::<_, Vec<_>>::new();
     for (pin_name, pin) in &group.pins {
         for signal in &pin.signals {
-            let mut signal = signal.name.clone();
-            if signal.starts_with("DEBUG_SUBGHZSPI-") {
-                signal = format!("SUBGHZSPI_{}", &signal[16..(signal.len() - 3)]);
-            }
+            let signal = &signal.name;
             // TODO: What are those signals (well, GPIO is clear) Which peripheral do they belong to?
-            if !["GPIO", "CEC", "AUDIOCLK", "VDDTCXO"].contains(&signal.as_str()) && !signal.contains("EXTI") {
-                // both peripherals and signals can have underscores in their names so there is no easy way to split
-                // check if signal name starts with one of the peripheral names
-                for periph in peri_kinds.keys() {
-                    if let Some(signal) = signal.strip_prefix(&format!("{periph}_")) {
-                        periph_pins.entry(periph.to_string()).or_default().push(
-                            stm32_data_serde::chip::core::peripheral::Pin {
-                                pin: pin_name.clone(),
-                                signal: signal.to_string(),
-                                af: None,
-                            },
-                        );
-                        break;
-                    }
-                }
+            if ["GPIO", "CEC", "AUDIOCLK", "VDDTCXO"].contains(&signal.as_str()) || signal.contains("EXTI") {
+                continue;
             }
+            let Some((signal_peri, signal_name)) = parse_signal_name(signal) else {
+                continue;
+            };
+            periph_pins.entry(signal_peri.to_string()).or_default().push(
+                stm32_data_serde::chip::core::peripheral::Pin {
+                    pin: pin_name.clone(),
+                    signal: signal_name.to_string(),
+                    af: None,
+                },
+            );
         }
     }
     for pins in periph_pins.values_mut() {
@@ -1151,15 +1163,7 @@ fn process_core(
             continue;
         }
 
-        let addr = if (chip_name.starts_with("STM32F0")
-            || chip_name.starts_with("STM32L1")
-            || chip_name.starts_with("STM32L0"))
-            && pname == "ADC"
-        {
-            defines.get_peri_addr("ADC1")
-        } else if chip_name.starts_with("STM32H7") && pname == "HRTIM" {
-            defines.get_peri_addr("HRTIM1")
-        } else if let Some(cap) = regex!(r"^FDCANRAM(?P<idx>[0-9]+)$").captures(&pname) {
+        let addr = if let Some(cap) = regex!(r"^FDCANRAM(?P<idx>[0-9]+)$").captures(&pname) {
             defines.get_peri_addr("FDCANRAM").map(|addr| {
                 if chip_name.starts_with("STM32H7") {
                     addr
@@ -1174,17 +1178,10 @@ fn process_core(
             defines.get_peri_addr(&pname)
         };
 
-        let addr = match addr {
-            Some(addr) => addr,
-            None => continue,
-        };
+        let Some(addr) = addr else { continue };
 
         let mut p = stm32_data_serde::chip::core::Peripheral {
-            name: if pname == "SBS" {
-                "SYSCFG".to_string()
-            } else {
-                pname.clone()
-            },
+            name: pname.clone(),
             address: addr,
             registers: None,
             rcc: None,
@@ -1276,68 +1273,65 @@ fn process_core(
     let mut peripherals: Vec<_> = peripherals.into_values().collect();
     peripherals.sort_by_key(|x| x.name.clone());
     // Collect DMA versions in the chip
-    let mut chip_dmas: Vec<_> = group
+    let mut dmas: Vec<_> = group
         .ips
         .values()
         .filter_map(|ip| {
             let version = &ip.version;
-            let sort = match ip.name.as_str() {
-                "DMA" => 1,
-                "BDMA" => 2,
-                "BDMA1" => 3,
-                "BDMA2" => 4,
-                "GPDMA" => 5,
-                _ => 0,
-            };
-            if sort > 0 && dma_channels.0.contains_key(version) {
-                Some((sort, version.clone()))
+            let instance = &ip.instance_name;
+            if let Some(dma) = dma_channels
+                .0
+                .get(version)
+                .or_else(|| dma_channels.0.get(&format!("{version}:{instance}")))
+            {
+                Some((ip.name.clone(), instance.clone(), dma))
             } else {
                 None
             }
         })
         .collect();
-    chip_dmas.sort();
-    chip_dmas.dedup();
-    let chip_dmas: Vec<_> = chip_dmas.into_iter().map(|(_sort, version)| version).collect();
-    // Process DMA channels
-    let chs = chip_dmas
-        .iter()
-        .flat_map(|dma| dma_channels.0.get(dma).unwrap().channels.clone());
+    dmas.sort_by_key(|(name, instance, _)| {
+        (
+            match name.as_str() {
+                "DMA" => 1,
+                "BDMA" => 2,
+                "BDMA1" => 3,
+                "BDMA2" => 4,
+                "GPDMA" => 5,
+                "HPDMA" => 6,
+                _ => 0,
+            },
+            instance.clone(),
+        )
+    });
+
     // The dma_channels[xx] is generic for multiple chips. The current chip may have less DMAs,
     // so we have to filter it.
-    let chs: Vec<_> = chs.filter(|ch| have_peris.contains(&ch.dma)).collect();
-    let core_dma_channels = chs.clone();
-    let have_chs: HashSet<_> = chs.into_iter().collect();
+    let dma_channels = dmas
+        .iter()
+        .flat_map(|(_, _, dma)| dma.channels.clone())
+        .filter(|ch| have_peris.contains(&ch.dma))
+        .collect::<Vec<_>>();
+    let have_chs: HashSet<_> = dma_channels.iter().map(|ch| ch.name.clone()).collect();
+
     // Process peripheral - DMA channel associations
     for p in &mut peripherals {
         let mut chs = Vec::new();
-        for dma in &chip_dmas {
-            let mut peri_chs = dma_channels.0.get(dma).unwrap().peripherals.get(&p.name);
-
-            // DAC1 is sometimes interchanged with DAC
-            if peri_chs.is_none() && p.name == "DAC1" {
-                peri_chs = dma_channels.0.get(dma).unwrap().peripherals.get("DAC");
-            }
-
-            if let Some(peri_chs) = peri_chs {
+        for (_, _, dma) in &dmas {
+            if let Some(peri_chs) = dma.peripherals.get(&p.name) {
                 chs.extend(
                     peri_chs
                         .iter()
-                        .filter(|ch| {
-                            if let Some(ch_channel) = &ch.channel {
-                                have_chs.iter().any(|x| &x.name == ch_channel)
-                            } else {
-                                true
-                            }
+                        .filter(|ch| match &ch.channel {
+                            None => true,
+                            Some(channel) => have_chs.contains(channel),
                         })
                         .cloned(),
                 );
             }
         }
-        if !chs.is_empty() {
-            chs.sort_by_key(|ch| (ch.channel.clone(), ch.dmamux.clone(), ch.request));
-            p.dma_channels = chs;
-        }
+        chs.sort_by_key(|ch| (ch.channel.clone(), ch.dmamux.clone(), ch.request));
+        p.dma_channels = chs;
     }
 
     let mut core = stm32_data_serde::chip::Core {
@@ -1345,7 +1339,7 @@ fn process_core(
         peripherals,
         nvic_priority_bits: None,
         interrupts: vec![],
-        dma_channels: core_dma_channels,
+        dma_channels,
     };
 
     chip_interrupts.process(&mut core, chip_name, h, group);

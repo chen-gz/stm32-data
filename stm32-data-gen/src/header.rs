@@ -175,11 +175,14 @@ impl Defines {
                 &["OCTOSPI2_R_BASE", "OCTOSPI2_R_BASE_NS", "OCTOSPI2_REG_BASE"],
             ),
             ("FLASH", &["FLASH_R_BASE", "FLASH_REG_BASE"]),
+            ("DAC", &["DAC1_BASE", "DAC_BASE"]),
+            ("DAC1", &["DAC1_BASE", "DAC_BASE"]),
+            ("ADC", &["ADC1_BASE", "ADC_BASE"]),
+            ("ADC1", &["ADC1_BASE", "ADC_BASE"]),
             (
-                "ADC_COMMON",
-                &["ADC_COMMON", "ADC1_COMMON", "ADC12_COMMON", "ADC123_COMMON"],
+                "ADC1_COMMON",
+                &["ADC1_COMMON_BASE", "ADC_COMMON_BASE", "ADC1_COMMON", "ADC_COMMON"],
             ),
-            ("ADC3_COMMON", &["ADC3_COMMON", "ADC4_COMMON", "ADC34_COMMON"]),
             ("CAN", &["CAN_BASE", "CAN1_BASE"]),
             ("FMC", &["FMC_BASE", "FMC_R_BASE"]),
             ("FSMC", &["FSMC_R_BASE"]),
@@ -190,6 +193,8 @@ impl Defines {
             ),
             ("FDCANRAM", &["SRAMCAN_BASE", "SRAMCAN_BASE_NS"]),
             ("VREFINTCAL", &["VREFINT_CAL_ADDR_CMSIS"]),
+            ("DSIHOST", &["DSI_BASE"]),
+            ("SYSCFG", &["SYSCFG_BASE", "SBS_BASE"]),
         ];
         let alt_peri_defines: HashMap<_, _> = ALT_PERI_DEFINES.iter().copied().collect();
 

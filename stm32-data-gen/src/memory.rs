@@ -1,6 +1,7 @@
-use regex::Regex;
 use stm32_data_serde::chip::memory::{self, Settings};
 use stm32_data_serde::chip::Memory;
+
+use crate::util::RegexMap;
 
 struct Mem {
     name: &'static str,
@@ -121,7 +122,9 @@ static MEMS: RegexMap<&[Mem]> = RegexMap::new(&[
     ("STM32G0...4",                  mem!(BANK_1 0x08000000 16, SRAM 0x20000000 8)),
     ("STM32G0...C",                  mem!(BANK_1 0x08000000 256, SRAM 0x20000000 128)),
     ("STM32G0...E",                  mem!(BANK_1 0x08000000 256, BANK_2 0x08040000 256, SRAM 0x20000000 128)),
-    ("STM32G0[34]..[68]",            mem!(BANK_1 0x08000000 32, SRAM 0x20000000 8)),
+    ("STM32G0[34]..8",               mem!(BANK_1 0x08000000 64, SRAM 0x20000000 8)),
+    ("STM32G0(3..6|4.J6)",           mem!(BANK_1 0x08000000 32, SRAM 0x20000000 8)),
+    ("STM32G04..6",                  mem!(BANK_1 0x08000000 64, SRAM 0x20000000 8)),
     ("STM32G0[56]..6",               mem!(BANK_1 0x08000000 32, SRAM 0x20000000 16)),
     ("STM32G0[56]..8",               mem!(BANK_1 0x08000000 64, SRAM 0x20000000 16)),
     ("STM32G0[78]..B",               mem!(BANK_1 0x08000000 128, SRAM 0x20000000 32)),
@@ -137,10 +140,14 @@ static MEMS: RegexMap<&[Mem]> = RegexMap::new(&[
     ("STM32G47..B",                  mem!(BANK_1 0x08000000 128, SRAM 0x20000000 96, SRAM2 0x20014000 0)),
     ("STM32G47..C",                  mem!(BANK_1 0x08000000 256, SRAM 0x20000000 96, SRAM2 0x20014000 0)),
     ("STM32G49..C",                  mem!(BANK_1 0x08000000 256, SRAM 0x20000000 32, SRAM2 0x20014000 0)),
-    // H5. TODO: check
-    ("STM32H5...B",                  mem!(BANK_1 0x08000000 64, BANK_2 0x08010000 64, SRAM 0x20000000 32, SRAM2 0x20004000 0)),
-    ("STM32H5...G",                  mem!(BANK_1 0x08000000 1024, SRAM 0x20000000 256, SRAM2 0x20040000 0)),
-    ("STM32H5...I",                  mem!(BANK_1 0x08000000 1024, BANK_2 0x08100000 1024, SRAM 0x20000000 256, SRAM2 0x20040000 0)),
+    // H5.
+    ("STM32H5...B",                  mem!(BANK_1 0x08000000 64, BANK_2 0x08010000 64, SRAM1 0x20000000 16, SRAM2 0x20004000 16)),
+    ("STM32H5...C",                  mem!(BANK_1 0x08000000 128, BANK_2 0x08020000 128, SRAM1 0x20000000 128, SRAM2 0x20020000 80, SRAM3 0x20034000 64)),
+    ("STM32H5...E",                  mem!(BANK_1 0x08000000 256, BANK_2 0x08040000 256, SRAM1 0x20000000 128, SRAM2 0x20020000 80, SRAM3 0x20034000 64)),
+    ("STM32H5...G",                  mem!(BANK_1 0x08000000 512, BANK_2 0x08080000 512, SRAM1 0x20000000 256, SRAM2 0x20040000 64, SRAM3 0x20050000 320)),
+    ("STM32H5...I",                  mem!(BANK_1 0x08000000 1024, BANK_2 0x08100000 1024, SRAM1 0x20000000 256, SRAM2 0x20040000 64, SRAM3 0x20050000 320)),
+    // H7RS
+    ("STM32H7[RS].*",                mem!(BANK_1 0x08000000 64, ITCM 0x00000000 192, DTCM 0x20000000 192, SRAM1 0x24000000 128, SRAM2 0x24020000 128, SRAM3 0x24040000 128, SRAM4 0x24060000 72, AHB_SRAM1 0x30000000 16, AHB_SRAM2 0x30004000 16)),
     // H7. TODO: check
     ("STM32H7...E",                  mem!(BANK_1 0x08000000 512, SRAM 0x24000000 128)),
     ("STM32H7[23]..G",               mem!(BANK_1 0x08000000 1024, SRAM 0x24000000 128)),
@@ -213,6 +220,7 @@ static MEMS: RegexMap<&[Mem]> = RegexMap::new(&[
     ("STM32U5[78]..I",               mem!(BANK_1 0x08000000 1024, BANK_2 0x08100000 1024, SRAM 0x20000000 192, SRAM2 0x20030000 64, SRAM3 0x20040000 512)),
     ("STM32U5[9A]..I",               mem!(BANK_1 0x08000000 1024, BANK_2 0x08100000 1024, SRAM 0x20000000 768, SRAM2 0x200c0000 64, SRAM3 0x200d0000 832, SRAM5 0x201a0000 832)),
     ("STM32U5[9A]..J",               mem!(BANK_1 0x08000000 2048, BANK_2 0x08200000 2048, SRAM 0x20000000 768, SRAM2 0x200c0000 64, SRAM3 0x200d0000 832, SRAM5 0x201a0000 832)),
+    ("STM32U5[FG]..I",               mem!(BANK_1 0x08000000 1024, BANK_2 0x08200000 1024, SRAM 0x20000000 768, SRAM2 0x200c0000 64, SRAM3 0x200d0000 832, SRAM5 0x201a0000 832, SRAM6 0x20270000 512)),
     ("STM32U5[FG]..J",               mem!(BANK_1 0x08000000 2048, BANK_2 0x08200000 2048, SRAM 0x20000000 768, SRAM2 0x200c0000 64, SRAM3 0x200d0000 832, SRAM5 0x201a0000 832, SRAM6 0x20270000 512)),
     // WB. TODO: check
     ("STM32WB...Y",                  mem!(BANK_1 0x08000000 640, SRAM 0x20000000 192)),
@@ -240,6 +248,7 @@ struct FlashInfo {
 }
 
 #[rustfmt::skip]
+#[allow(clippy::identity_op)]
 static FLASH_INFO: RegexMap<FlashInfo> = RegexMap::new(&[
     ("STM32C0.*",               FlashInfo{ erase_value: 0xFF, write_size:  8, erase_size: &[(  2*1024, 0)] }),
     ("STM32F030.C",             FlashInfo{ erase_value: 0xFF, write_size:  4, erase_size: &[(  2*1024, 0)] }),
@@ -257,6 +266,7 @@ static FLASH_INFO: RegexMap<FlashInfo> = RegexMap::new(&[
     ("STM32G4[78].*",           FlashInfo{ erase_value: 0xFF, write_size:  8, erase_size: &[(  4*1024, 0)] }),
     ("STM32G4.*",               FlashInfo{ erase_value: 0xFF, write_size:  8, erase_size: &[(  2*1024, 0)] }),
     ("STM32H5.*",               FlashInfo{ erase_value: 0xFF, write_size: 16, erase_size: &[(  8*1024, 0)] }),
+    ("STM32H7[RS].*",           FlashInfo{ erase_value: 0xFF, write_size: 16, erase_size: &[(  8*1024, 0)] }),
     ("STM32H7[AB].*",           FlashInfo{ erase_value: 0xFF, write_size: 32, erase_size: &[(  8*1024, 0)] }),
     ("STM32H7.*",               FlashInfo{ erase_value: 0xFF, write_size: 32, erase_size: &[(128*1024, 0)] }),
     ("STM32L4[PQRS].*",         FlashInfo{ erase_value: 0xFF, write_size:  8, erase_size: &[(  8*1024, 0)] }),
@@ -274,28 +284,9 @@ static FLASH_INFO: RegexMap<FlashInfo> = RegexMap::new(&[
     ("STM32.*",                 FlashInfo{ erase_value: 0xFF, write_size:  8, erase_size: &[(  2*1024, 0)] }),
 ]);
 
-struct RegexMap<T: 'static> {
-    map: &'static [(&'static str, T)],
-}
-
-impl<T: 'static> RegexMap<T> {
-    const fn new(map: &'static [(&'static str, T)]) -> Self {
-        Self { map }
-    }
-
-    fn get(&self, key: &str) -> Option<&T> {
-        for (k, v) in self.map {
-            if Regex::new(&format!("^{k}$")).unwrap().is_match(key) {
-                return Some(v);
-            }
-        }
-        None
-    }
-}
-
 pub fn get(chip: &str) -> Vec<Memory> {
-    let mems = *MEMS.get(chip).unwrap();
-    let flash = FLASH_INFO.get(chip).unwrap();
+    let mems = *MEMS.must_get(chip);
+    let flash = FLASH_INFO.must_get(chip);
 
     let mut res = Vec::new();
 
@@ -324,6 +315,7 @@ pub fn get(chip: &str) -> Vec<Memory> {
                     if i != flash.erase_size.len() - 1 {
                         size = size.min(erase_size * count);
                     }
+                    #[allow(clippy::redundant_field_names)]
                     res.push(Memory {
                         name: format!("{}_REGION_{}", mem.name, i + 1),
                         address: mem.address + offs,
